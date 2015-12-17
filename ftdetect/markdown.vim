@@ -66,7 +66,9 @@ function! s:GetHeadingLink(headingName, markdownStyle)
     endif
 
     let l:headingLink = substitute(l:headingLink, " ", "-", "g")
-    let l:headingLink = substitute(l:headingLink, "!()", "", "g")
+    let l:headingLink = substitute(l:headingLink, "!", "", "g")
+    let l:headingLink = substitute(l:headingLink, "(", "", "g")
+    let l:headingLink = substitute(l:headingLink, ")", "", "g")
 
     return l:headingLink
 endfunction
