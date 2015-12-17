@@ -28,6 +28,10 @@ Suggest to manage your vim plugins via [Vundle][4] so you can install it simply 
 
 3. `:PluginInstall`
 
+## References
+
+* <https://github.com/ajorgensen/vim-markdown-toc>
+
 [1]: http://mazhuang.org/2015/12/05/diff-between-gfm-and-redcarpet/
 [2]: https://help.github.com/articles/github-flavored-markdown/
 [3]: https://github.com/vmg/redcarpet
