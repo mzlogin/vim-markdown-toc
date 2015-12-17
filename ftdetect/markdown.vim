@@ -1,7 +1,7 @@
 if exists("g:loaded_MarkdownTocPlugin")
     finish
 endif
-"let g:loaded_MarkdownTocPlugin = 1
+let g:loaded_MarkdownTocPlugin = 1
 
 function! s:HeadingLineRegex()
     return "^[#]\\{1,6} "
@@ -11,14 +11,11 @@ function! s:GetHeadingLines()
     let l:winview = winsaveview()
     let l:headingLines = []
     let l:headingLineRegex = <SID>HeadingLineRegex()
-    let l:flags = "Wc"
-    normal! gg
+    let l:flags = "W"
 
     while search(l:headingLineRegex, l:flags) != 0
         let l:line = getline(".")
         call add(l:headingLines, l:line)
-
-        let l:flags = "W"
     endwhile
 
     call winrestview(l:winview)
@@ -31,12 +28,73 @@ function! s:GetHeadingLevel(headingLine)
     return len(l:sharps)
 endfunction
 
+function! s:SpecSubstitiute(lowerHeading, src, dst)
+    let l:headingLink = a:lowerHeading
+
+    if l:headingLink[0] ==# a:src
+        let l:quote = a:dst
+        let l:headingLink = l:headingLink[1:-1]
+        if len(l:headingLink) > 0
+            let l:quote = l:quote . "-"
+        endif
+        let l:headingLink = l:quote . l:headingLink
+    endif
+
+    if l:headingLink[-1] ==# a:src
+        let l:quote = a:dst
+        let l:headingLink = l:headingLink[0:-2]
+        if len(l:headingLink) > 0
+            let l:quote = "-" . l:quote
+        endif
+        let l:headingLink = l:headingLink . l:quote
+    endif
+
+    let l:headingLink = substitute(l:headingLink, a:src, "-" . a:dst . "-", "g")
+
+    return l:headingLink
+endfunction
+
 function! s:GetHeadingLink(headingName, markdownStyle)
     let l:headingLink = tolower(a:headingName)
+
+    let l:headingLink = substitute(l:headingLink, "`", "", "g")
 
     if a:markdownStyle ==# "GFM"
         let l:headingLink = substitute(l:headingLink, "/", "", "g")
         let l:headingLink = substitute(l:headingLink, "\"", "", "g")
+        let l:headingLink = substitute(l:headingLink, "@", "", "g")
+        let l:headingLink = substitute(l:headingLink, "#", "", "g")
+        let l:headingLink = substitute(l:headingLink, "\\$", "", "g")
+        let l:headingLink = substitute(l:headingLink, "%", "", "g")
+        let l:headingLink = substitute(l:headingLink, "\\^", "", "g")
+        let l:headingLink = substitute(l:headingLink, "+", "", "g")
+        let l:headingLink = substitute(l:headingLink, "&", "", "g")
+        let l:headingLink = substitute(l:headingLink, "*", "", "g")
+        let l:headingLink = substitute(l:headingLink, "'", "", "g")
+        let l:headingLink = substitute(l:headingLink, "\\~", "", "g")
+        let l:headingLink = substitute(l:headingLink, ";", "", "g")
+        let l:headingLink = substitute(l:headingLink, "\\.", "", "g")
+        let l:headingLink = substitute(l:headingLink, ",", "", "g")
+        let l:headingLink = substitute(l:headingLink, "?", "", "g")
+        let l:headingLink = substitute(l:headingLink, ":", "", "g")
+        let l:headingLink = substitute(l:headingLink, "|", "", "g")
+
+        let l:headingLink = substitute(l:headingLink, "？", "", "g")
+        let l:headingLink = substitute(l:headingLink, "，", "", "g")
+        let l:headingLink = substitute(l:headingLink, "。", "", "g")
+        let l:headingLink = substitute(l:headingLink, "、", "", "g")
+        let l:headingLink = substitute(l:headingLink, "！", "", "g")
+        let l:headingLink = substitute(l:headingLink, "：", "", "g")
+        let l:headingLink = substitute(l:headingLink, "；", "", "g")
+        let l:headingLink = substitute(l:headingLink, "“", "", "g")
+        let l:headingLink = substitute(l:headingLink, "”", "", "g")
+        let l:headingLink = substitute(l:headingLink, "《", "", "g")
+        let l:headingLink = substitute(l:headingLink, "》", "", "g")
+        let l:headingLink = substitute(l:headingLink, "「", "", "g")
+        let l:headingLink = substitute(l:headingLink, "」", "", "g")
+        let l:headingLink = substitute(l:headingLink, "『", "", "g")
+        let l:headingLink = substitute(l:headingLink, "』", "", "g")
+        let l:headingLink = substitute(l:headingLink, "——", "", "g")
     elseif a:markdownStyle ==# "Redcarpet"
         if l:headingLink[0] ==# "-"
             let l:headingLink = l:headingLink[1:-1]
@@ -44,25 +102,8 @@ function! s:GetHeadingLink(headingName, markdownStyle)
 
         let l:headingLink = substitute(l:headingLink, "/", "-", "g")
 
-        if l:headingLink[0] ==# "\""
-            let l:quote = "quot"
-            let l:headingLink = l:headingLink[1:-1]
-            if len(l:headingLink) > 0
-                let l:quote = l:quote . "-"
-            endif
-            let l:headingLink = l:quote . l:headingLink
-        endif
-
-        if l:headingLink[-1] ==# "\""
-            let l:quote = "quot"
-            let l:headingLink = l:headingLink[0:-2]
-            if len(l:headingLink) > 0
-                let l:quote = "-" . l:quote
-            endif
-            let l:headingLink = l:headingLink . l:quote
-        endif
-
-        let l:headingLink = substitute(l:headingLink, "\"", "-quot-", "g")
+        let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "\"", "quot")
+        let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "'", "39")
     endif
 
     let l:headingLink = substitute(l:headingLink, " ", "-", "g")
