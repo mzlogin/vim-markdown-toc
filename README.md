@@ -18,13 +18,13 @@ There are *GFM* and *Redcarpet* two styles TOC links, see [here][1] to view thei
 
 Suggest to manage your vim plugins via [Vundle][4] so you can install it simply three steps:
 
-1. add the following line to your 
+1. add the following line to your vimrc file
 
     ```
     Plugin 'mzlogin/vim-markdown-toc'
     ```
 
-2. reload your vimrc file
+2. `:so $MYVIMRC`
 
 3. `:PluginInstall`
 
