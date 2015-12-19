@@ -2,6 +2,8 @@
 
 A vim plugin to generate table of contents for a markdown file.
 
+[中文版本使用指南][7]
+
 ## Table of Contents
 
 * [Usage](#usage)
@@ -61,3 +63,4 @@ Suggest to manage your vim plugins via [Vundle][4] so you can install it simply 
 [4]: http://github.com/VundleVim/Vundle.Vim
 [5]: https://github.com/mzlogin/chinese-copywriting-guidelines/blob/Simplified/README.en.md
 [6]: http://mazhuang.org/wiki/chinese-copywriting-guidelines/
+[7]: http://mazhuang.org/2015/12/19/vim-markdown-toc/
