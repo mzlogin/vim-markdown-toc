@@ -2,6 +2,13 @@
 
 A vim plugin to generate table of contents for a markdown file.
 
+## Table of Contents
+
+* [Usage](#usage)
+* [Installation](#installation)
+* [Screenshots](#screenshots)
+* [References](#references)
+
 ## Usage
 
 There are *GFM* and *Redcarpet* two styles TOC links, see [here][1] to view their difference.
@@ -12,13 +19,13 @@ Move the cursor to the place you want to insert TOC, then type a command below s
 
     Generate table of contents in [GFM][2] link style.
 
-    Suit markdown files in **GitHub repository**, like `README.md`.
+    Suit markdown files in **GitHub repository**, like `README.md`, or **Jekyll/gh-pages use kramdown with GFM support on**.
 
 2. `:GenTocRedcarpet`
 
     Generate table of contents in [Redcarpet][3] link style.
 
-    Suit **Jekyll/gh-pages** use Redcarpet as it's markdown parser.
+    Suit **Jekyll/gh-pages or anywhere else use Redcarpet as it's markdown parser**.
 
 ## Installation
 
