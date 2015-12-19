@@ -2,7 +2,7 @@
 
 A vim plugin to generate table of contents for a markdown file.
 
-[中文版本使用指南][7]
+[中文版使用指南][7]
 
 ## Table of Contents
 
