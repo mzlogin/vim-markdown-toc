@@ -7,15 +7,67 @@ function! s:HeadingLineRegex()
     return "^[#]\\{1,6} "
 endfunction
 
+function! s:GetSections(beginRegex, endRegex)
+    let l:winview = winsaveview()
+    let l:sections = {}
+
+    normal! gg
+    let l:flags = "Wc"
+    let l:beginLine = 0
+    let l:regex = a:beginRegex
+    while search(l:regex, l:flags)
+        let l:lineNum = line(".")
+        if l:beginLine == 0
+            let l:beginLine = l:lineNum
+            let l:regex = a:endRegex
+        else
+            let l:sections[l:beginLine] = l:lineNum
+            let l:beginLine = 0
+            let l:regex = a:beginRegex
+        endif
+        let l:flags = "W"
+    endwhile
+
+    call winrestview(l:winview)
+
+    return l:sections
+endfunction
+
+function! s:GetCodeSections()
+    let l:codeSections = {}
+
+    call extend(l:codeSections, <SID>GetSections("^```", "^```"))
+    call extend(l:codeSections, <SID>GetSections("^{% highlight", "^{% endhighlight"))
+
+    return l:codeSections
+endfunction
+
+function! s:IsLineInCodeSections(codeSections, lineNum)
+    for beginLine in keys(a:codeSections)
+        if a:lineNum > str2nr(beginLine)
+            if a:lineNum < a:codeSections[beginLine]
+                return 1
+            endif
+        endif
+    endfor
+
+    return 0
+endfunction
+
 function! s:GetHeadingLines()
     let l:winview = winsaveview()
     let l:headingLines = []
+    let l:codeSections = <SID>GetCodeSections()
+
     let l:headingLineRegex = <SID>HeadingLineRegex()
     let l:flags = "W"
 
     while search(l:headingLineRegex, l:flags) != 0
         let l:line = getline(".")
-        call add(l:headingLines, l:line)
+        let l:lineNum = line(".")
+        if <SID>IsLineInCodeSections(l:codeSections, l:lineNum) == 0
+            call add(l:headingLines, l:line)
+        endif
     endwhile
 
     call winrestview(l:winview)
