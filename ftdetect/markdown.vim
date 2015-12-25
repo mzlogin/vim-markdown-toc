@@ -82,50 +82,6 @@ function! s:GetHeadingLevel(headingLine)
     return len(l:sharps)
 endfunction
 
-function! s:SpecSubstitiute(lowerHeading, src, dst)
-    let l:headingLink = a:lowerHeading
-
-    if l:headingLink[0] ==# a:src
-        let l:quote = a:dst
-        let l:headingLink = l:headingLink[1:-1]
-        if len(l:headingLink) > 0
-            let l:quote = l:quote . "-"
-        endif
-        let l:headingLink = l:quote . l:headingLink
-    endif
-
-    if l:headingLink[-1:] ==# a:src
-        let l:quote = a:dst
-        let l:headingLink = l:headingLink[0:-2]
-        if len(l:headingLink) > 0
-            let l:quote = "-" . l:quote
-        endif
-        let l:headingLink = l:headingLink . l:quote
-    endif
-
-    let l:headingLink = substitute(l:headingLink, a:src, "-" . a:dst . "-", "g")
-
-    return l:headingLink
-endfunction
-
-function! s:RemoveSpecHeadTail(lowerHeading, src, dst)
-    let l:headingLink = a:lowerHeading
-
-    if l:headingLink[0] ==# a:src
-        let l:headingLink = l:headingLink[1:-1]
-    endif
-
-    if l:headingLink[-1:] ==# a:src
-        let l:headingLink = l:headingLink[0:-2]
-    endif
-
-    if a:src != a:dst
-        let l:headingLink = substitute(l:headingLink, a:src, a:dst, "g")
-    endif
-
-    return l:headingLink
-endfunction
-
 function! s:GetHeadingLinkGFM(headingName)
     let l:headingLink = tolower(a:headingName)
 
@@ -153,35 +109,15 @@ endfunction
 
 function! s:GetHeadingLinkRedcarpet(headingName)
     let l:headingLink = tolower(a:headingName)
-    let l:headingLink = substitute(l:headingLink, "`", "", "g")
-    let l:headingLink = substitute(l:headingLink, "()", "-", "g")
 
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "-", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "@", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "#", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\$", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "%", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\^", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "*", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "(", "(")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ")", ")")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "/", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\~", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "!", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ";", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\.", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ",", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "?", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ":", "-")
-    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "|", "-")
+    let l:headingLink = substitute(l:headingLink, "<[^>]\\+>", "", "g")
+    let l:headingLink = substitute(l:headingLink, "&", "&amp;", "g")
+    let l:headingLink = substitute(l:headingLink, "\"", "&quot;", "g")
+    let l:headingLink = substitute(l:headingLink, "'", "&#39;", "g")
 
-    let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "\"", "quot")
-    let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "'", "39")
-    let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "&", "amp")
-
-    let l:headingLink = substitute(l:headingLink, " ", "-", "g")
-    let l:headingLink = substitute(l:headingLink, "(", "", "g")
-    let l:headingLink = substitute(l:headingLink, ")", "", "g")
+    let l:headingLink = substitute(l:headingLink, "[ \\-&+\\$,/:;=?@\"#{}|\\^\\~\\[\\]`\\*()%.!']\\+", "-", "g")
+    let l:headingLink = substitute(l:headingLink, "-\\{2,}", "-", "g")
+    let l:headingLink = substitute(l:headingLink, "\\%^[\\-_]\\+\\|[\\-_]\\+\\%$", "", "g")
 
     return l:headingLink
 endfunction
