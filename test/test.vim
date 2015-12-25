@@ -1,3 +1,5 @@
+exec "silent! source " . "../ftplugin/markdown.vim"
+
 let g:caseCount = 0
 let g:passCaseCount = 0
 let g:errorCaseCount = 0
