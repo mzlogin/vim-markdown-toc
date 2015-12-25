@@ -3,6 +3,8 @@ if exists("g:loaded_MarkdownTocPlugin")
 endif
 let g:loaded_MarkdownTocPlugin = 1
 
+let g:GFMHeadingIds = {}
+
 function! s:HeadingLineRegex()
     return "^[#]\\{1,6} "
 endfunction
@@ -124,74 +126,58 @@ function! s:RemoveSpecHeadTail(lowerHeading, src, dst)
     return l:headingLink
 endfunction
 
-function! s:GetHeadingLink(headingName, markdownStyle)
+function! s:GetHeadingLinkGFM(headingName)
     let l:headingLink = tolower(a:headingName)
 
-    let l:headingLink = substitute(l:headingLink, "`", "", "g")
+    let l:headingLink = substitute(l:headingLink, "\\%^_\\+\\|_\\+\\%$", "", "g")
+    let l:headingLink = substitute(l:headingLink, "[^[:alnum:]\u4e00-\u9fbf _-]", "", "g")
+    let l:headingLink = substitute(l:headingLink, " ", "-", "g")
 
-    if a:markdownStyle ==# "GFM"
-        let l:headingLink = substitute(l:headingLink, "/", "", "g")
-        let l:headingLink = substitute(l:headingLink, "\"", "", "g")
-        let l:headingLink = substitute(l:headingLink, "@", "", "g")
-        let l:headingLink = substitute(l:headingLink, "#", "", "g")
-        let l:headingLink = substitute(l:headingLink, "\\$", "", "g")
-        let l:headingLink = substitute(l:headingLink, "%", "", "g")
-        let l:headingLink = substitute(l:headingLink, "\\^", "", "g")
-        let l:headingLink = substitute(l:headingLink, "+", "", "g")
-        let l:headingLink = substitute(l:headingLink, "&", "", "g")
-        let l:headingLink = substitute(l:headingLink, "*", "", "g")
-        let l:headingLink = substitute(l:headingLink, "'", "", "g")
-        let l:headingLink = substitute(l:headingLink, "\\~", "", "g")
-        let l:headingLink = substitute(l:headingLink, ";", "", "g")
-        let l:headingLink = substitute(l:headingLink, "\\.", "", "g")
-        let l:headingLink = substitute(l:headingLink, ",", "", "g")
-        let l:headingLink = substitute(l:headingLink, "?", "", "g")
-        let l:headingLink = substitute(l:headingLink, ":", "", "g")
-        let l:headingLink = substitute(l:headingLink, "|", "", "g")
-        let l:headingLink = substitute(l:headingLink, "!", "", "g")
-
-        let l:headingLink = substitute(l:headingLink, "？", "", "g")
-        let l:headingLink = substitute(l:headingLink, "，", "", "g")
-        let l:headingLink = substitute(l:headingLink, "。", "", "g")
-        let l:headingLink = substitute(l:headingLink, "、", "", "g")
-        let l:headingLink = substitute(l:headingLink, "！", "", "g")
-        let l:headingLink = substitute(l:headingLink, "：", "", "g")
-        let l:headingLink = substitute(l:headingLink, "；", "", "g")
-        let l:headingLink = substitute(l:headingLink, "“", "", "g")
-        let l:headingLink = substitute(l:headingLink, "”", "", "g")
-        let l:headingLink = substitute(l:headingLink, "《", "", "g")
-        let l:headingLink = substitute(l:headingLink, "》", "", "g")
-        let l:headingLink = substitute(l:headingLink, "「", "", "g")
-        let l:headingLink = substitute(l:headingLink, "」", "", "g")
-        let l:headingLink = substitute(l:headingLink, "『", "", "g")
-        let l:headingLink = substitute(l:headingLink, "』", "", "g")
-        let l:headingLink = substitute(l:headingLink, "——", "", "g")
-    elseif a:markdownStyle ==# "Redcarpet"
-        let l:headingLink = substitute(l:headingLink, "()", "-", "g")
-
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "-", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "@", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "#", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\$", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "%", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\^", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "*", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "(", "(")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ")", ")")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "/", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\~", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "!", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ";", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\.", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ",", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "?", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ":", "-")
-        let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "|", "-")
-
-        let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "\"", "quot")
-        let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "'", "39")
-        let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "&", "amp")
+    if l:headingLink ==# ""
+        let l:nullKey = "<null>"
+        if has_key(g:GFMHeadingIds, l:nullKey)
+            let g:GFMHeadingIds[l:nullKey] += 1
+            let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:nullKey]
+        else
+            let g:GFMHeadingIds[l:nullKey] = 0
+        endif
+    elseif has_key(g:GFMHeadingIds, l:headingLink)
+        let g:GFMHeadingIds[l:headingLink] += 1
+        let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:headingLink]
+    else
+        let g:GFMHeadingIds[l:headingLink] = 0
     endif
+
+    return l:headingLink
+endfunction
+
+function! s:GetHeadingLinkRedcarpet(headingName)
+    let l:headingLink = tolower(a:headingName)
+    let l:headingLink = substitute(l:headingLink, "`", "", "g")
+    let l:headingLink = substitute(l:headingLink, "()", "-", "g")
+
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "-", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "@", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "#", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\$", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "%", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\^", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "*", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "(", "(")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ")", ")")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "/", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\~", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "!", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ";", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "\\.", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ",", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "?", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, ":", "-")
+    let l:headingLink = <SID>RemoveSpecHeadTail(l:headingLink, "|", "-")
+
+    let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "\"", "quot")
+    let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "'", "39")
+    let l:headingLink = <SID>SpecSubstitiute(l:headingLink, "&", "amp")
 
     let l:headingLink = substitute(l:headingLink, " ", "-", "g")
     let l:headingLink = substitute(l:headingLink, "(", "", "g")
@@ -200,9 +186,23 @@ function! s:GetHeadingLink(headingName, markdownStyle)
     return l:headingLink
 endfunction
 
+function! s:GetHeadingLink(headingName, markdownStyle)
+    if a:markdownStyle ==# "GFM"
+        return <SID>GetHeadingLinkGFM(a:headingName)
+    elseif a:markdownStyle ==# "Redcarpet"
+        return <SID>GetHeadingLinkRedcarpet(a:headingName)
+    endif
+endfunction
+
+function! GetHeadingLinkTest(headingName, markdownStyle)
+    return <SID>GetHeadingLink(a:headingName, a:markdownStyle)
+endfunction
+
 function! s:GenToc(markdownStyle)
     let l:headingLines = <SID>GetHeadingLines()
     let l:levels = []
+
+    let g:gfmHeadingIds = {}
     
     for headingLine in l:headingLines
         call add(l:levels, <SID>GetHeadingLevel(headingLine))
@@ -225,7 +225,6 @@ function! s:GenToc(markdownStyle)
 
         let l:i += 1
     endfor
-
 endfunction
 
 command! GenTocGFM :call <SID>GenToc("GFM")
