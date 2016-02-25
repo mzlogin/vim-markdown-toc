@@ -138,7 +138,7 @@ function! s:GenToc(markdownStyle)
     let l:headingLines = <SID>GetHeadingLines()
     let l:levels = []
 
-    let g:gfmHeadingIds = {}
+    let g:GFMHeadingIds = {}
     
     for headingLine in l:headingLines
         call add(l:levels, <SID>GetHeadingLevel(headingLine))
