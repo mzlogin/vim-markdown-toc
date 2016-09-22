@@ -21,13 +21,13 @@ Move the cursor to the place you want to insert TOC, then type a command below s
 
     Generate table of contents in [GFM][2] link style.
 
-    Suit markdown files in **GitHub repository**, like `README.md`, or **Jekyll/gh-pages use kramdown with GFM support on**.
+    Suit markdown files in **GitHub repository**, like `README.md`.
 
 2. `:GenTocRedcarpet`
 
     Generate table of contents in [Redcarpet][3] link style.
 
-    Suit **Jekyll/gh-pages or anywhere else use Redcarpet as it's markdown parser**.
+    Suit **Jekyll or anywhere else use Redcarpet as it's markdown parser**.
 
 ## Installation
 
