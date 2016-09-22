@@ -27,7 +27,7 @@ call ASSERT(GetHeadingLinkTest("###### ,", "GFM") ==# "")
 call ASSERT(GetHeadingLinkTest("# ,", "GFM") ==# "-1")
 call ASSERT(GetHeadingLinkTest("## No additional spaces before / after punctuation in fullwidth form", "GFM") ==# "no-additional-spaces-before--after-punctuation-in-fullwidth-form")
 call ASSERT(GetHeadingLinkTest("### No additional spaces before/after punctuation in fullwidth form", "GFM") ==# "no-additional-spaces-beforeafter-punctuation-in-fullwidth-form")
-call ASSERT(GetHeadingLinkTest(" ####   Hello    Markdown    ", "GFM") ==# "hello-markdown")
+call ASSERT(GetHeadingLinkTest("####   Hello    Markdown    ", "GFM") ==# "hello----markdown")
 
 " Redcarpet Test Cases
 call ASSERT(GetHeadingLinkTest("# -Hello-World-", "Redcarpet") ==# "hello-world")

@@ -123,7 +123,10 @@ function! s:GetHeadingLinkRedcarpet(headingName)
 endfunction
 
 function! s:GetHeadingName(headingLine)
-    return join(split(a:headingLine, "\\s\\+")[1:-1], " ")
+    let l:headingName = join(split(a:headingLine, " ")[1:-1], " ")
+    let l:headingName = substitute(l:headingName, "^ \\+", "", "g")
+    let l:headingName = substitute(l:headingName, " \\+$", "", "g")
+    return l:headingName
 endfunction
 
 function! s:GetHeadingLink(headingName, markdownStyle)
