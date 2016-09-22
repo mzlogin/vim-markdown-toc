@@ -122,6 +122,10 @@ function! s:GetHeadingLinkRedcarpet(headingName)
     return l:headingLink
 endfunction
 
+function! s:GetHeadingName(headingLine)
+    return join(split(a:headingLine, "\\s\\+")[1:-1], " ")
+endfunction
+
 function! s:GetHeadingLink(headingName, markdownStyle)
     if a:markdownStyle ==# "GFM"
         return <SID>GetHeadingLinkGFM(a:headingName)
@@ -130,8 +134,9 @@ function! s:GetHeadingLink(headingName, markdownStyle)
     endif
 endfunction
 
-function! GetHeadingLinkTest(headingName, markdownStyle)
-    return <SID>GetHeadingLink(a:headingName, a:markdownStyle)
+function! GetHeadingLinkTest(headingLine, markdownStyle)
+    let l:headingName = <SID>GetHeadingName(a:headingLine)
+    return <SID>GetHeadingLink(l:headingName, a:markdownStyle)
 endfunction
 
 function! s:GenToc(markdownStyle)
@@ -148,7 +153,7 @@ function! s:GenToc(markdownStyle)
 
     let l:i = 0
     for headingLine in l:headingLines
-        let l:headingName = join(split(headingLine, " ")[1:-1], " ")
+        let l:headingName = <SID>GetHeadingName(headingLine)
         let l:headingIndents = l:levels[i] - l:minLevel
 
         let l:headingLink = <SID>GetHeadingLink(l:headingName, a:markdownStyle)
