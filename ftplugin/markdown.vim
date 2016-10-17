@@ -3,6 +3,14 @@ if exists("g:loaded_MarkdownTocPlugin")
 endif
 let g:loaded_MarkdownTocPlugin = 1
 
+if !exists("g:vmt_auto_update")
+    let g:vmt_auto_update = 1
+endif
+
+if !exists("g:vmt_dont_insert_marker")
+    let g:vmt_dont_insert_marker = 0
+endif
+
 let g:GFMHeadingIds = {}
 
 function! s:HeadingLineRegex()
@@ -154,6 +162,10 @@ function! s:GenToc(markdownStyle)
 
     let l:minLevel = min(l:levels)
 
+    if g:vmt_dont_insert_marker == 0
+        put =<SID>GetBeginMarker(a:markdownStyle)
+    endif
+
     let l:i = 0
     for headingLine in l:headingLines
         let l:headingName = <SID>GetHeadingName(headingLine)
@@ -169,7 +181,129 @@ function! s:GenToc(markdownStyle)
 
         let l:i += 1
     endfor
+
+    if g:vmt_dont_insert_marker == 0
+        put =<SID>GetEndMarker()
+    endif
+endfunction
+
+function! s:GetBeginMarker(markdownStyle)
+    return "<!-- vim-markdown-toc " . a:markdownStyle . " -->"
+endfunction
+
+function! s:GetEndMarker()
+    return "<!-- vim-markdown-toc -->"
+endfunction
+
+function! s:GetBeginMarkerPattern()
+    return "<!-- vim-markdown-toc \\([[:alpha:]]\\+\\) -->"
+endfunction
+
+function! s:GetEndMarkerPattern()
+    return <SID>GetEndMarker()
+endfunction
+
+function! s:UpdateToc()
+    let l:winview = winsaveview()
+
+    let l:totalLineNum = line("$")
+
+    let l:markdownStyle = <SID>GetExistsTocStyle()
+
+    if l:markdownStyle != ""
+        let [l:beginLineNumber,l:endLineNumber] = <SID>DeleteExistsToc()
+        let l:isFirstLine = (l:beginLineNumber == 1)
+        if l:beginLineNumber > 1
+            let l:beginLineNumber -= 1
+        endif
+
+        if l:isFirstLine != 0
+            call cursor(l:beginLineNumber, 1)
+            put! =''
+        endif
+
+        call cursor(l:beginLineNumber, 1)
+        call <SID>GenToc(l:markdownStyle)
+
+        if l:isFirstLine != 0
+            call cursor(l:beginLineNumber, 1)
+            normal! dd
+        endif
+
+        " fix line number to avoid shake
+        if l:winview['lnum'] > l:endLineNumber
+            let l:diff = line("$") - l:totalLineNum
+            let l:winview['lnum'] += l:diff
+            let l:winview['topline'] += l:diff
+        endif
+    else
+        echoe "Cannot find existing toc"
+    endif
+
+    call winrestview(l:winview)
+endfunction
+
+function! s:DeleteExistsToc()
+    let l:winview = winsaveview()
+
+    normal! gg
+
+    let l:tocBeginPattern = <SID>GetBeginMarkerPattern()
+    let l:tocEndPattern = <SID>GetEndMarkerPattern()
+
+    let l:beginLineNumber = -1
+    let l:endLineNumber= -1
+
+    let l:flags = "Wc"
+    if search(l:tocBeginPattern, l:flags) != 0
+        let l:beginLineNumber = line(".")
+
+        if search(l:tocEndPattern, l:flags) != 0
+            let l:endLineNumber = line(".")
+            execute l:beginLineNumber. "," . l:endLineNumber. "delete_"
+        else
+            echoe "Cannot find toc end marker"
+            let l:beginLineNumber = -1
+        endif
+    endif
+
+    call winrestview(l:winview)
+
+    return [l:beginLineNumber,l:endLineNumber]
+endfunction
+
+function! s:GetExistsTocStyle()
+    let l:winview = winsaveview()
+
+    normal! gg
+
+    let l:markdownStyle = ""
+
+    let l:tocBeginPattern = <SID>GetBeginMarkerPattern()
+    let l:tocEndPattern = <SID>GetEndMarkerPattern()
+
+    let l:flags = "Wc"
+    if search(l:tocBeginPattern, l:flags) != 0
+        let l:line = getline(".")
+
+        if search(l:tocEndPattern, l:flags) != 0
+            let l:markdownStyle = matchlist(l:line, l:tocBeginPattern)[1]
+            if l:markdownStyle != "GFM" && l:markdownStyle != "Redcarpet"
+                echoe "Find unsupported markdown style"
+                let l:markdownStyle = ""
+            end
+        endif
+    endif
+
+    call winrestview(l:winview)
+
+    return l:markdownStyle
 endfunction
 
 command! GenTocGFM :call <SID>GenToc("GFM")
 command! GenTocRedcarpet :call <SID>GenToc("Redcarpet")
+command! UpdateToc :call <SID>UpdateToc()
+
+if g:vmt_auto_update == 1
+    autocmd BufWritePre *.md :silent! UpdateToc
+endif
