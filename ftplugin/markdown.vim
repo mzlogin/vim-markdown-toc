@@ -182,6 +182,9 @@ function! s:GenToc(markdownStyle)
         let l:i += 1
     endfor
 
+    " a blank line after toc to avoid effect typo of content below
+    put =''
+
     if g:vmt_dont_insert_marker == 0
         put =<SID>GetEndMarker()
     endif
