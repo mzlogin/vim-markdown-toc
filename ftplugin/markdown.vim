@@ -3,8 +3,8 @@ if exists("g:loaded_MarkdownTocPlugin")
 endif
 let g:loaded_MarkdownTocPlugin = 1
 
-if !exists("g:vmt_auto_update")
-    let g:vmt_auto_update = 1
+if !exists("g:vmt_auto_update_on_save")
+    let g:vmt_auto_update_on_save = 1
 endif
 
 if !exists("g:vmt_dont_insert_marker")
@@ -304,6 +304,6 @@ command! GenTocGFM :call <SID>GenToc("GFM")
 command! GenTocRedcarpet :call <SID>GenToc("Redcarpet")
 command! UpdateToc :call <SID>UpdateToc()
 
-if g:vmt_auto_update == 1
-    autocmd BufWritePre *.md :silent! UpdateToc
+if g:vmt_auto_update_on_save == 1
+    autocmd BufWritePre *.{md,mdown,mkd,mkdn,markdown,mdwn} :silent! UpdateToc
 endif
