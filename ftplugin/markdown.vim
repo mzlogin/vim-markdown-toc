@@ -7,8 +7,8 @@ if !exists("g:vmt_auto_update_on_save")
     let g:vmt_auto_update_on_save = 1
 endif
 
-if !exists("g:vmt_dont_insert_marker")
-    let g:vmt_dont_insert_marker = 0
+if !exists("g:vmt_dont_insert_fence")
+    let g:vmt_dont_insert_fence = 0
 endif
 
 let g:GFMHeadingIds = {}
@@ -162,8 +162,8 @@ function! s:GenToc(markdownStyle)
 
     let l:minLevel = min(l:levels)
 
-    if g:vmt_dont_insert_marker == 0
-        put =<SID>GetBeginMarker(a:markdownStyle)
+    if g:vmt_dont_insert_fence == 0
+        put =<SID>GetBeginFence(a:markdownStyle)
     endif
 
     let l:i = 0
@@ -185,25 +185,25 @@ function! s:GenToc(markdownStyle)
     " a blank line after toc to avoid effect typo of content below
     put =''
 
-    if g:vmt_dont_insert_marker == 0
-        put =<SID>GetEndMarker()
+    if g:vmt_dont_insert_fence == 0
+        put =<SID>GetEndFence()
     endif
 endfunction
 
-function! s:GetBeginMarker(markdownStyle)
+function! s:GetBeginFence(markdownStyle)
     return "<!-- vim-markdown-toc " . a:markdownStyle . " -->"
 endfunction
 
-function! s:GetEndMarker()
+function! s:GetEndFence()
     return "<!-- vim-markdown-toc -->"
 endfunction
 
-function! s:GetBeginMarkerPattern()
+function! s:GetBeginFencePattern()
     return "<!-- vim-markdown-toc \\([[:alpha:]]\\+\\) -->"
 endfunction
 
-function! s:GetEndMarkerPattern()
-    return <SID>GetEndMarker()
+function! s:GetEndFencePattern()
+    return <SID>GetEndFence()
 endfunction
 
 function! s:UpdateToc()
@@ -211,10 +211,13 @@ function! s:UpdateToc()
 
     let l:totalLineNum = line("$")
 
-    let l:markdownStyle = <SID>GetExistsTocStyle()
+    let [l:markdownStyle, l:beginLineNumber, l:endLineNumber] = <SID>DeleteExistingToc()
 
-    if l:markdownStyle != ""
-        let [l:beginLineNumber,l:endLineNumber] = <SID>DeleteExistsToc()
+    if l:markdownStyle ==# ""
+        echoe "Cannot find existing toc"
+    elseif l:markdownStyle ==# "Unknown"
+        echoe "Find unsupported style toc"
+    else
         let l:isFirstLine = (l:beginLineNumber == 1)
         if l:beginLineNumber > 1
             let l:beginLineNumber -= 1
@@ -239,68 +242,46 @@ function! s:UpdateToc()
             let l:winview['lnum'] += l:diff
             let l:winview['topline'] += l:diff
         endif
-    else
-        echoe "Cannot find existing toc"
     endif
 
     call winrestview(l:winview)
 endfunction
 
-function! s:DeleteExistsToc()
+function! s:DeleteExistingToc()
     let l:winview = winsaveview()
 
     normal! gg
 
-    let l:tocBeginPattern = <SID>GetBeginMarkerPattern()
-    let l:tocEndPattern = <SID>GetEndMarkerPattern()
+    let l:tocBeginPattern = <SID>GetBeginFencePattern()
+    let l:tocEndPattern = <SID>GetEndFencePattern()
 
+    let l:markdownStyle = ""
     let l:beginLineNumber = -1
     let l:endLineNumber= -1
 
     let l:flags = "Wc"
     if search(l:tocBeginPattern, l:flags) != 0
+        let l:beginLine = getline(".")
         let l:beginLineNumber = line(".")
 
         if search(l:tocEndPattern, l:flags) != 0
-            let l:endLineNumber = line(".")
-            execute l:beginLineNumber. "," . l:endLineNumber. "delete_"
-        else
-            echoe "Cannot find toc end marker"
-            let l:beginLineNumber = -1
-        endif
-    endif
-
-    call winrestview(l:winview)
-
-    return [l:beginLineNumber,l:endLineNumber]
-endfunction
-
-function! s:GetExistsTocStyle()
-    let l:winview = winsaveview()
-
-    normal! gg
-
-    let l:markdownStyle = ""
-
-    let l:tocBeginPattern = <SID>GetBeginMarkerPattern()
-    let l:tocEndPattern = <SID>GetEndMarkerPattern()
-
-    let l:flags = "Wc"
-    if search(l:tocBeginPattern, l:flags) != 0
-        let l:line = getline(".")
-
-        if search(l:tocEndPattern, l:flags) != 0
-            let l:markdownStyle = matchlist(l:line, l:tocBeginPattern)[1]
+            let l:markdownStyle = matchlist(l:beginLine, l:tocBeginPattern)[1]
             if l:markdownStyle != "GFM" && l:markdownStyle != "Redcarpet"
-                echoe "Find unsupported markdown style"
-                let l:markdownStyle = ""
+                let l:markdownStyle = "Unknown"
+            else
+                let l:endLineNumber = line(".")
+                execute l:beginLineNumber. "," . l:endLineNumber. "delete_"
             end
+        else
+            echoe "Cannot find toc end fence"
         endif
+    else
+        echoe "Cannot find toc begin fence"
     endif
 
     call winrestview(l:winview)
 
-    return l:markdownStyle
+    return [l:markdownStyle, l:beginLineNumber, l:endLineNumber]
 endfunction
 
 command! GenTocGFM :call <SID>GenToc("GFM")
