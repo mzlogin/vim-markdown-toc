@@ -69,7 +69,7 @@ You can view [here][1] to know differences between *GFM* and *Redcarpet* style t
 
 ### Update existing table of contents manually
 
-Generally you don't need to do this, existing table will auto update on save by default. If you want do it manually, just use `:UpdateToc` command.
+Generally you don't need to do this, existing table of contents will auto update on save by default. If you want do it manually, just use `:UpdateToc` command.
 
 ## Options
 
