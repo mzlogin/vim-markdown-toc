@@ -69,7 +69,7 @@ You can view [here][1] to know differences between *GFM* and *Redcarpet* style t
 
 ### Update existing table of contents manually
 
-Just use `:UpdateToc` command.
+Generally you don't need to do this, existing table will auto update on save by default. If you want do it manually, just use `:UpdateToc` command.
 
 ## Options
 
@@ -90,13 +90,13 @@ Just use `:UpdateToc` command.
    default: 0
 
    By default, the `:GenTocXXX` commands will add `<!-- vim-markdown-toc -->` fence to the table of contents, it is designed for feature of auto update table of contents on save, it won't effect what your Markdown file looks like after parse.
-   
+
    If you don't like this, you can remove the fence by add the following line to your vimrc file:
-   
+
    ```viml
    let g:vmt_dont_insert_fence = 1
    ```
-   
+
    But then you will lose the convenience of auto update tables of contens on save.
 
 ## Screenshots
