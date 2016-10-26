@@ -3,7 +3,7 @@
 * [chapter 1](#chapter-1)
 * [chapter       two](#chapter-------two)
 * [第三章！](#第三章)
-	* [heading with out space behind hashes](#heading-with-out-space-behind-hashes)
+	* [heading without space behind hashes](#heading-without-space-behind-hashes)
 
 <!-- vim-markdown-toc -->
 
@@ -58,4 +58,4 @@
 
 # 第三章！
 
-##heading with out space behind hashes
+##heading without space behind hashes
