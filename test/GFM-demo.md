@@ -1,6 +1,11 @@
+
+<!-- vim-markdown-toc GFM -->
 * [chapter 1](#chapter-1)
 * [chapter       two](#chapter-------two)
 * [第三章！](#第三章)
+	* [heading with out space behind hashes](#heading-with-out-space-behind-hashes)
+
+<!-- vim-markdown-toc -->
 
 # chapter 1
 
@@ -52,3 +57,5 @@
 
 
 # 第三章！
+
+##heading with out space behind hashes
