@@ -14,7 +14,7 @@ endif
 let g:GFMHeadingIds = {}
 
 function! s:HeadingLineRegex()
-    return "^[#]\\{1,6} "
+    return "^[#]\\{1,6}"
 endfunction
 
 function! s:GetSections(beginRegex, endRegex)
@@ -86,8 +86,7 @@ function! s:GetHeadingLines()
 endfunction
 
 function! s:GetHeadingLevel(headingLine)
-    let l:sharps = split(a:headingLine, " ")[0]
-    return len(l:sharps)
+    return match(a:headingLine, '[^#]')
 endfunction
 
 function! s:GetHeadingLinkGFM(headingName)
@@ -131,9 +130,8 @@ function! s:GetHeadingLinkRedcarpet(headingName)
 endfunction
 
 function! s:GetHeadingName(headingLine)
-    let l:headingName = join(split(a:headingLine, " ")[1:-1], " ")
-    let l:headingName = substitute(l:headingName, "^ \\+", "", "g")
-    let l:headingName = substitute(l:headingName, " \\+$", "", "g")
+    let l:headingName = substitute(a:headingLine, '^#*\s*', "", "")
+    let l:headingName = substitute(l:headingName, '\s\+$', "", "g")
     return l:headingName
 endfunction
 
