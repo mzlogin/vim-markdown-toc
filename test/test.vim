@@ -33,6 +33,10 @@ call ASSERT(GetHeadingLinkTest("### heading with trailing hashes ###", "GFM") ==
 call ASSERT(GetHeadingLinkTest("### heading with trailing hashes###", "GFM") ==# "heading-with-trailing-hashes-1")
 call ASSERT(GetHeadingLinkTest("### heading with trailing hashes ends with spaces ###  ", "GFM") ==# "heading-with-trailing-hashes-ends-with-spaces-")
 call ASSERT(GetHeadingLinkTest("### heading with trailing hashes nested with spaces # #  #  ", "GFM") ==# "heading-with-trailing-hashes-nested-with-spaces----")
+call ASSERT(GetHeadingLinkTest("### [vim-markdown-toc](https://github.com/mzlogin/vim-markdown-toc)", "GFM") ==# "vim-markdown-toc")
+call ASSERT(GetHeadingLinkTest("### [vim-markdown-toc-again][1]", "GFM") ==# "vim-markdown-toc-again")
+call ASSERT(GetHeadingLinkTest("### ![vim-markdown-toc-img](/path/to/a/png)", "GFM") ==# "vim-markdown-toc-img")
+call ASSERT(GetHeadingLinkTest("### ![](/path/to/a/png)", "GFM") ==# "-2")
 
 " Redcarpet Test Cases
 call ASSERT(GetHeadingLinkTest("# -Hello-World-", "Redcarpet") ==# "hello-world")
