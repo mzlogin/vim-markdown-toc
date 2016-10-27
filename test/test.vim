@@ -28,6 +28,11 @@ call ASSERT(GetHeadingLinkTest("# ,", "GFM") ==# "-1")
 call ASSERT(GetHeadingLinkTest("## No additional spaces before / after punctuation in fullwidth form", "GFM") ==# "no-additional-spaces-before--after-punctuation-in-fullwidth-form")
 call ASSERT(GetHeadingLinkTest("### No additional spaces before/after punctuation in fullwidth form", "GFM") ==# "no-additional-spaces-beforeafter-punctuation-in-fullwidth-form")
 call ASSERT(GetHeadingLinkTest("####   Hello    Markdown    ", "GFM") ==# "hello----markdown")
+call ASSERT(GetHeadingLinkTest("####Heading without a space after the hashes", "GFM") ==# "heading-without-a-space-after-the-hashes")
+call ASSERT(GetHeadingLinkTest("### heading with trailing hashes ###", "GFM") ==# "heading-with-trailing-hashes")
+call ASSERT(GetHeadingLinkTest("### heading with trailing hashes###", "GFM") ==# "heading-with-trailing-hashes-1")
+call ASSERT(GetHeadingLinkTest("### heading with trailing hashes ends with spaces ###  ", "GFM") ==# "heading-with-trailing-hashes-ends-with-spaces-")
+call ASSERT(GetHeadingLinkTest("### heading with trailing hashes nested with spaces # #  #  ", "GFM") ==# "heading-with-trailing-hashes-nested-with-spaces----")
 
 " Redcarpet Test Cases
 call ASSERT(GetHeadingLinkTest("# -Hello-World-", "Redcarpet") ==# "hello-world")

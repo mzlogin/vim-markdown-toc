@@ -131,7 +131,7 @@ endfunction
 
 function! s:GetHeadingName(headingLine)
     let l:headingName = substitute(a:headingLine, '^#*\s*', "", "")
-    let l:headingName = substitute(l:headingName, '\s\+$', "", "g")
+    let l:headingName = substitute(l:headingName, '\s*#*$', "", "")
     return l:headingName
 endfunction
 
