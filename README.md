@@ -11,7 +11,7 @@ A vim plugin to generate table of contents for Markdown files.
 * [Installation](#installation)
 * [Usage](#usage)
 	* [Generate table of contents](#generate-table-of-contents)
-	* [Update existing table of contents manually](#update-existing-table-of-contents-manually)
+	* [Update existing table of contents](#update-existing-table-of-contents)
 * [Options](#options)
 * [Screenshots](#screenshots)
 * [References](#references)
@@ -67,9 +67,11 @@ Move the cursor to the line you want to append table of contents, then type a co
 
 You can view [here][1] to know differences between *GFM* and *Redcarpet* style toc links.
 
-### Update existing table of contents manually
+### Update existing table of contents
 
-Generally you don't need to do this, existing table of contents will auto update on save by default. If you want do it manually, just use `:UpdateToc` command.
+Generally you don't need to do this, existing table of contents will auto update on save by default.
+
+The `:UpdateToc` command, which is designed to update toc manually, can only work when `g:vmt_auto_update_on_save` turned off, and keep insert fence.
 
 ## Options
 
@@ -89,7 +91,7 @@ Generally you don't need to do this, existing table of contents will auto update
 
    default: 0
 
-   By default, the `:GenTocXXX` commands will add `<!-- vim-markdown-toc -->` fence to the table of contents, it is designed for feature of auto update table of contents on save, it won't effect what your Markdown file looks like after parse.
+   By default, the `:GenTocXXX` commands will add `<!-- vim-markdown-toc -->` fence to the table of contents, it is designed for feature of auto update table of contents on save and `:UpdateToc` command, it won't effect what your Markdown file looks like after parse.
 
    If you don't like this, you can remove the fence by add the following line to your vimrc file:
 
@@ -97,7 +99,7 @@ Generally you don't need to do this, existing table of contents will auto update
    let g:vmt_dont_insert_fence = 1
    ```
 
-   But then you will lose the convenience of auto update tables of contens on save.
+   But then you will lose the convenience of auto update tables of contens on save and `:UpdateToc` command. When you want to update toc, you need to remove existing toc manually and rerun `:GenTocXXX` commands.
 
 ## Screenshots
 

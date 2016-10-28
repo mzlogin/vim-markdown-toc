@@ -216,9 +216,9 @@ function! s:UpdateToc()
     let [l:markdownStyle, l:beginLineNumber, l:endLineNumber] = <SID>DeleteExistingToc()
 
     if l:markdownStyle ==# ""
-        echoe "Cannot find existing toc"
+        echom "Cannot find existing toc"
     elseif l:markdownStyle ==# "Unknown"
-        echoe "Find unsupported style toc"
+        echom "Find unsupported style toc"
     else
         let l:isFirstLine = (l:beginLineNumber == 1)
         if l:beginLineNumber > 1
@@ -275,10 +275,10 @@ function! s:DeleteExistingToc()
                 execute l:beginLineNumber. "," . l:endLineNumber. "delete_"
             end
         else
-            echoe "Cannot find toc end fence"
+            echom "Cannot find toc end fence"
         endif
     else
-        echoe "Cannot find toc begin fence"
+        echom "Cannot find toc begin fence"
     endif
 
     call winrestview(l:winview)
