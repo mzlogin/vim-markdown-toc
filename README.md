@@ -69,7 +69,7 @@ You can view [here][1] to know differences between *GFM* and *Redcarpet* style t
 
 ### Update existing table of contents
 
-Generally you don't need to do this, existing table of contents will auto update on save by default.
+Generally you don't need to do this manually, existing table of contents will auto update on save by default.
 
 The `:UpdateToc` command, which is designed to update toc manually, can only work when `g:vmt_auto_update_on_save` turned off, and keep insert fence.
 
