@@ -175,7 +175,7 @@ function! s:GenToc(markdownStyle)
 
         let l:headingLink = <SID>GetHeadingLink(l:headingName, a:markdownStyle)
 
-        let l:heading = repeat("\t", l:headingIndents)
+        let l:heading = repeat(s:GetIndentText(), l:headingIndents)
         let l:heading = l:heading . "* [" . l:headingName . "]"
         let l:heading = l:heading . "(#" . l:headingLink . ")"
 
@@ -189,6 +189,14 @@ function! s:GenToc(markdownStyle)
 
     if g:vmt_dont_insert_fence == 0
         put =<SID>GetEndFence()
+    endif
+endfunction
+
+function! s:GetIndentText()
+    if &expandtab
+        return repeat(" ", &shiftwidth)
+    else
+        return "\t"
     endif
 endfunction
 
