@@ -14,7 +14,7 @@ endif
 let g:GFMHeadingIds = {}
 
 function! s:HeadingLineRegex()
-    return '\v(^.+$\n\=+|^.+$\n\-+|^#{1,6})'
+    return '\v(^.+$\n^\=+$|^.+$\n^\-+$|^#{1,6})'
 endfunction
 
 function! s:GetSections(beginRegex, endRegex)

@@ -15,8 +15,14 @@
 heading1
 ===
 
+not heading1
+===ha
+
 heading2
 --
+
+not heading2
+---ha
 
 ===
 
