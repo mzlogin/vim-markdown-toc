@@ -14,7 +14,7 @@ endif
 let g:GFMHeadingIds = {}
 
 function! s:HeadingLineRegex()
-    return "^[#]\\{1,6}"
+    return '\v(^.+$\n\=+|^.+$\n\-+|^#{1,6})'
 endfunction
 
 function! s:GetSections(beginRegex, endRegex)
@@ -54,8 +54,8 @@ endfunction
 
 function! s:IsLineInCodeSections(codeSections, lineNum)
     for beginLine in keys(a:codeSections)
-        if a:lineNum > str2nr(beginLine)
-            if a:lineNum < a:codeSections[beginLine]
+        if a:lineNum >= str2nr(beginLine)
+            if a:lineNum <= a:codeSections[beginLine]
                 return 1
             endif
         endif
@@ -76,6 +76,15 @@ function! s:GetHeadingLines()
         let l:line = getline(".")
         let l:lineNum = line(".")
         if <SID>IsLineInCodeSections(l:codeSections, l:lineNum) == 0
+            " === compatible with Setext Style headings
+            let l:nextLine = getline(l:lineNum + 1)
+            if matchstr(l:nextLine, '\v^\=+$') != ""
+                let l:line = "# " . l:line
+            elseif matchstr(l:nextLine, '\v^\-+$') != ""
+                let l:line = "## " . l:line
+            endif
+            " ===
+
             call add(l:headingLines, l:line)
         endif
     endwhile
