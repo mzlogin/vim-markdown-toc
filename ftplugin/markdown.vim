@@ -102,7 +102,7 @@ function! s:GetHeadingLinkGFM(headingName)
     let l:headingLink = tolower(a:headingName)
 
     let l:headingLink = substitute(l:headingLink, "\\%^_\\+\\|_\\+\\%$", "", "g")
-    let l:headingLink = substitute(l:headingLink, "[^[:alnum:]\u4e00-\u9fbf _-]", "", "g")
+    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u4e00-\u9fbf _-]", "", "g")
     let l:headingLink = substitute(l:headingLink, " ", "-", "g")
 
     if l:headingLink ==# ""
