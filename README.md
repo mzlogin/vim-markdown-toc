@@ -101,6 +101,38 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
    But then you will lose the convenience of auto update tables of contens on save and `:UpdateToc` command. When you want to update toc, you need to remove existing toc manually and rerun `:GenTocXXX` commands.
 
+3. `g:vmt_cycle_list_item_markers`
+
+   default: 0
+
+   By default, `*` is used to denote every level of a list:
+
+   ```
+   * [Level 1](#level-1)
+       * [Level 1-1](#level-1-1)
+       * [Level 1-2](#level-1-2)
+           * [Level 1-2-1](#level-1-2-1)
+   * [Level 2](level-2)
+   ```
+
+   If you set:
+
+   ```viml
+   let g:vmt_cycle_list_item_markers = 1
+   ```
+
+   every level will instead cycle between the valid list item markers `*`, `-` and `+`:
+
+   ```
+   * [Level 1](#level-1)
+       - [Level 1-1](#level-1-1)
+       - [Level 1-2](#level-1-2)
+           + [Level 1-2-1](#level-1-2-1)
+   * [Level 2](level-2)
+   ```
+
+   This renders the same according to Markdown rules, but might appeal to those who care about readability of the source.
+
 ## Screenshots
 
 * [online demo in English][5]

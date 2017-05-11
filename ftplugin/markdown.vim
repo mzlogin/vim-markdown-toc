@@ -11,6 +11,10 @@ if !exists("g:vmt_dont_insert_fence")
     let g:vmt_dont_insert_fence = 0
 endif
 
+if !exists("g:vmt_cycle_list_item_markers")
+    let g:vmt_cycle_list_item_markers = 0
+endif
+
 let g:GFMHeadingIds = {}
 
 function! s:HeadingLineRegex()
@@ -164,6 +168,7 @@ endfunction
 function! s:GenToc(markdownStyle)
     let l:headingLines = <SID>GetHeadingLines()
     let l:levels = []
+    let l:listItemChars = ['*']
 
     let g:GFMHeadingIds = {}
     
@@ -177,15 +182,20 @@ function! s:GenToc(markdownStyle)
         put =<SID>GetBeginFence(a:markdownStyle)
     endif
 
+    if g:vmt_cycle_list_item_markers == 1
+        let l:listItemChars += ['-', '+']
+    endif
+
     let l:i = 0
     for headingLine in l:headingLines
         let l:headingName = <SID>GetHeadingName(headingLine)
         let l:headingIndents = l:levels[i] - l:minLevel
-
+        let l:listItemChar = l:listItemChars[(l:levels[i] + 1) % len(l:listItemChars)]
         let l:headingLink = <SID>GetHeadingLink(l:headingName, a:markdownStyle)
 
         let l:heading = repeat(s:GetIndentText(), l:headingIndents)
-        let l:heading = l:heading . "* [" . l:headingName . "]"
+        let l:heading = l:heading . l:listItemChar
+        let l:heading = l:heading . " [" . l:headingName . "]"
         let l:heading = l:heading . "(#" . l:headingLink . ")"
 
         put =l:heading
