@@ -15,6 +15,10 @@ if !exists("g:vmt_cycle_list_item_markers")
     let g:vmt_cycle_list_item_markers = 0
 endif
 
+if !exists("g:vmt_gfm_link_connector")
+    let g:vmt_gfm_link_connector = '-'
+endif
+
 let g:GFMHeadingIds = {}
 
 function! s:HeadingLineRegex()
@@ -107,19 +111,19 @@ function! s:GetHeadingLinkGFM(headingName)
 
     let l:headingLink = substitute(l:headingLink, "\\%^_\\+\\|_\\+\\%$", "", "g")
     let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u4e00-\u9fbf _-]", "", "g")
-    let l:headingLink = substitute(l:headingLink, " ", "-", "g")
+    let l:headingLink = substitute(l:headingLink, " ", g:vmt_gfm_link_connector, "g")
 
     if l:headingLink ==# ""
         let l:nullKey = "<null>"
         if has_key(g:GFMHeadingIds, l:nullKey)
             let g:GFMHeadingIds[l:nullKey] += 1
-            let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:nullKey]
+            let l:headingLink = l:headingLink . g:vmt_gfm_link_connector . g:GFMHeadingIds[l:nullKey]
         else
             let g:GFMHeadingIds[l:nullKey] = 0
         endif
     elseif has_key(g:GFMHeadingIds, l:headingLink)
         let g:GFMHeadingIds[l:headingLink] += 1
-        let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:headingLink]
+        let l:headingLink = l:headingLink . g:vmt_gfm_link_connector . g:GFMHeadingIds[l:headingLink]
     else
         let g:GFMHeadingIds[l:headingLink] = 0
     endif
@@ -171,7 +175,7 @@ function! s:GenToc(markdownStyle)
     let l:listItemChars = ['*']
 
     let g:GFMHeadingIds = {}
-    
+
     for headingLine in l:headingLines
         call add(l:levels, <SID>GetHeadingLevel(headingLine))
     endfor
