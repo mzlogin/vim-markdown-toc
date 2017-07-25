@@ -99,7 +99,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
    let g:vmt_dont_insert_fence = 1
    ```
 
-   But then you will lose the convenience of auto update tables of contens on save and `:UpdateToc` command. When you want to update toc, you need to remove existing toc manually and rerun `:GenTocXXX` commands.
+   But then you will lose the convenience of auto update tables of contents on save and `:UpdateToc` command. When you want to update toc, you need to remove existing toc manually and rerun `:GenTocXXX` commands.
 
 3. `g:vmt_cycle_list_item_markers`
 
