@@ -12,6 +12,7 @@ A vim plugin to generate table of contents for Markdown files.
 * [Usage](#usage)
     * [Generate table of contents](#generate-table-of-contents)
     * [Update existing table of contents](#update-existing-table-of-contents)
+    * [Remove table of contents](#remove-table-of-contents)
 * [Options](#options)
 * [Screenshots](#screenshots)
 * [References](#references)
@@ -72,6 +73,10 @@ You can view [here][1] to know differences between *GFM* and *Redcarpet* style t
 Generally you don't need to do this manually, existing table of contents will auto update on save by default.
 
 The `:UpdateToc` command, which is designed to update toc manually, can only work when `g:vmt_auto_update_on_save` turned off, and keep insert fence.
+
+### Remove table of contents
+
+`:RemoveToc` command will do this for you, just remember keep insert fence option by default.
 
 ## Options
 
