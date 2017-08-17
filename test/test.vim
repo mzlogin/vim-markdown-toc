@@ -37,6 +37,7 @@ call ASSERT(GetHeadingLinkTest("### [vim-markdown-toc](https://github.com/mzlogi
 call ASSERT(GetHeadingLinkTest("### [vim-markdown-toc-again][1]", "GFM") ==# "vim-markdown-toc-again")
 call ASSERT(GetHeadingLinkTest("### ![vim-markdown-toc-img](/path/to/a/png)", "GFM") ==# "vim-markdown-toc-img")
 call ASSERT(GetHeadingLinkTest("### ![](/path/to/a/png)", "GFM") ==# "-2")
+call ASSERT(GetHeadingLinkTest("### 1.1", "GFM") ==# "11")
 
 " Redcarpet Test Cases
 call ASSERT(GetHeadingLinkTest("# -Hello-World-", "Redcarpet") ==# "hello-world")
