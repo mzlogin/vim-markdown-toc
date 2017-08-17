@@ -9,6 +9,7 @@
     * [heading with trailing hashes](#heading-with-trailing-hashes)
     * [heading with trailing hashes nested with spaces #](#heading-with-trailing-hashes-nested-with-spaces-)
     * [heading with trailing hashes nested with spaces # #](#heading-with-trailing-hashes-nested-with-spaces--)
+    * [1.1 heading with dot 2.1](#11-heading-with-dot-21)
 
 <!-- vim-markdown-toc -->
 
@@ -41,3 +42,5 @@ not heading2
 ## heading with trailing hashes nested with spaces # #
 
 ## heading with trailing hashes nested with spaces # #  
+
+## 1.1 heading with dot 2.1
