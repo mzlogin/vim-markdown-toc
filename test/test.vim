@@ -38,6 +38,7 @@ call ASSERT(GetHeadingLinkTest("### [vim-markdown-toc-again][1]", "GFM") ==# "vi
 call ASSERT(GetHeadingLinkTest("### ![vim-markdown-toc-img](/path/to/a/png)", "GFM") ==# "vim-markdown-toc-img")
 call ASSERT(GetHeadingLinkTest("### ![](/path/to/a/png)", "GFM") ==# "-2")
 call ASSERT(GetHeadingLinkTest("### 1.1", "GFM") ==# "11")
+call ASSERT(GetHeadingLinkTest("### heading with some \"special\" \(yes, special\) chars: les caractères unicodes", "GFM") ==# "heading-with-some-special-yes-special-chars-les-caractères-unicodes")
 
 " Redcarpet Test Cases
 call ASSERT(GetHeadingLinkTest("# -Hello-World-", "Redcarpet") ==# "hello-world")
