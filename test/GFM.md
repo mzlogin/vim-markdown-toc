@@ -11,6 +11,7 @@
     * [heading with trailing hashes nested with spaces # #](#heading-with-trailing-hashes-nested-with-spaces--)
     * [1.1 heading with dot 2.1](#11-heading-with-dot-21)
     * [1.1](#11)
+        * [heading with some "special" (yes, special) chars: les caractères unicodes](#heading-with-some-special-yes-special-chars-les-caractères-unicodes)
 
 <!-- vim-markdown-toc -->
 
@@ -47,3 +48,5 @@ not heading2
 ## 1.1 heading with dot 2.1
 
 ## 1.1
+
+### heading with some "special" (yes, special) chars: les caractères unicodes
