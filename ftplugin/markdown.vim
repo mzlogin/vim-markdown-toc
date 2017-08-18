@@ -105,11 +105,11 @@ endfunction
 function! s:GetHeadingLinkGFM(headingName)
     let l:headingLink = tolower(a:headingName)
 
-    " \%^ : beginning of file
+    " \%^ : beginning of string
     " _\+ : one of more underscore _
     " \| : OR
     " _\+ : one of more underscore _
-    " \%$ : end of file
+    " \%$ : end of string
     let l:headingLink = substitute(l:headingLink, "\\%^_\\+\\|_\\+\\%$", "", "g")
     " Characters that are not alphanumeric, latin1 extended (for accents) and
     " chineese chars are removed.
