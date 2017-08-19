@@ -105,12 +105,12 @@ endfunction
 function! s:GetHeadingLinkGFM(headingName)
     let l:headingLink = tolower(a:headingName)
 
-    " \%^ : beginning of string
+    " \_^ : start of line
     " _\+ : one of more underscore _
     " \| : OR
     " _\+ : one of more underscore _
-    " \%$ : end of string
-    let l:headingLink = substitute(l:headingLink, "\\%^_\\+\\|_\\+\\%$", "", "g")
+    " \_$ : end of line
+    let l:headingLink = substitute(l:headingLink, "\\_^_\\+\\|_\\+\\_$", "", "g")
     " Characters that are not alphanumeric, latin1 extended (for accents) and
     " chinese chars are removed.
     " \\%#=0: allow this pattern to use the regexp engine he wants. Having
