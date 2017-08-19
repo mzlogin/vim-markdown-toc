@@ -1,6 +1,6 @@
 # vim-markdown-toc
 
-A vim plugin to generate table of contents for Markdown files.
+A vim 7.4+ plugin to generate table of contents for Markdown files.
 
 [中文版使用指南][7]
 

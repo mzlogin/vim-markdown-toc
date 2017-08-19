@@ -1,6 +1,9 @@
 if exists("g:loaded_MarkdownTocPlugin")
     finish
+elseif v:version < 704
+    finish
 endif
+
 let g:loaded_MarkdownTocPlugin = 1
 
 if !exists("g:vmt_auto_update_on_save")
