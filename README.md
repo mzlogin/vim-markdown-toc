@@ -1,6 +1,6 @@
 # vim-markdown-toc
 
-A vim plugin to generate table of contents for Markdown files.
+A vim 7.4+ plugin to generate table of contents for Markdown files.
 
 [中文版使用指南][7]
 
@@ -12,6 +12,7 @@ A vim plugin to generate table of contents for Markdown files.
 * [Usage](#usage)
     * [Generate table of contents](#generate-table-of-contents)
     * [Update existing table of contents](#update-existing-table-of-contents)
+    * [Remove table of contents](#remove-table-of-contents)
 * [Options](#options)
 * [Screenshots](#screenshots)
 * [References](#references)
@@ -73,6 +74,10 @@ Generally you don't need to do this manually, existing table of contents will au
 
 The `:UpdateToc` command, which is designed to update toc manually, can only work when `g:vmt_auto_update_on_save` turned off, and keep insert fence.
 
+### Remove table of contents
+
+`:RemoveToc` command will do this for you, just remember keep insert fence option by default.
+
 ## Options
 
 1. `g:vmt_auto_update_on_save`
@@ -99,7 +104,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
    let g:vmt_dont_insert_fence = 1
    ```
 
-   But then you will lose the convenience of auto update tables of contens on save and `:UpdateToc` command. When you want to update toc, you need to remove existing toc manually and rerun `:GenTocXXX` commands.
+   But then you will lose the convenience of auto update tables of contents on save and `:UpdateToc` command. When you want to update toc, you need to remove existing toc manually and rerun `:GenTocXXX` commands.
 
 3. `g:vmt_cycle_list_item_markers`
 

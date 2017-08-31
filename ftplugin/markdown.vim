@@ -1,6 +1,9 @@
 if exists("g:loaded_MarkdownTocPlugin")
     finish
+elseif v:version < 704
+    finish
 endif
+
 let g:loaded_MarkdownTocPlugin = 1
 
 if !exists("g:vmt_auto_update_on_save")
@@ -105,8 +108,17 @@ endfunction
 function! s:GetHeadingLinkGFM(headingName)
     let l:headingLink = tolower(a:headingName)
 
-    let l:headingLink = substitute(l:headingLink, "\\%^_\\+\\|_\\+\\%$", "", "g")
-    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u4e00-\u9fbf _-]", "", "g")
+    " \_^ : start of line
+    " _\+ : one of more underscore _
+    " \| : OR
+    " _\+ : one of more underscore _
+    " \_$ : end of line
+    let l:headingLink = substitute(l:headingLink, "\\_^_\\+\\|_\\+\\_$", "", "g")
+    " Characters that are not alphanumeric, latin1 extended (for accents) and
+    " chinese chars are removed.
+    " \\%#=0: allow this pattern to use the regexp engine he wants. Having
+    " `set re=1` in the vimrc could break this behavior. cf. issue #19
+    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u00C0-\u00FF\u4e00-\u9fbf _-]", "", "g")
     let l:headingLink = substitute(l:headingLink, " ", "-", "g")
 
     if l:headingLink ==# ""
@@ -320,6 +332,7 @@ endfunction
 command! GenTocGFM :call <SID>GenToc("GFM")
 command! GenTocRedcarpet :call <SID>GenToc("Redcarpet")
 command! UpdateToc :call <SID>UpdateToc()
+command! RemoveToc :call <SID>DeleteExistingToc()
 
 if g:vmt_auto_update_on_save == 1
     autocmd BufWritePre *.{md,mdown,mkd,mkdn,markdown,mdwn} :silent! UpdateToc
