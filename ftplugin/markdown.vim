@@ -201,7 +201,7 @@ function! s:GenToc(markdownStyle)
     let l:i = 0
     " a black line before toc
     if !empty(l:headingLines)
-        put! =''
+        put =''
     endif
     for headingLine in l:headingLines
         let l:headingName = <SID>GetHeadingName(headingLine)
