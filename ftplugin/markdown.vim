@@ -187,6 +187,10 @@ function! s:GenToc(markdownStyle)
     endif
 
     let l:i = 0
+    " a black line before toc
+    if !empty(l:headingLines)
+        put! =''
+    endif
     for headingLine in l:headingLines
         let l:headingName = <SID>GetHeadingName(headingLine)
         let l:headingIndents = l:levels[i] - l:minLevel
@@ -262,7 +266,7 @@ function! s:UpdateToc()
 
         if l:isFirstLine != 0
             call cursor(l:beginLineNumber, 1)
-            normal! dd
+            normal! "_dd
         endif
 
         " fix line number to avoid shake
