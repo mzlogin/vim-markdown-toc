@@ -14,6 +14,14 @@ if !exists("g:vmt_dont_insert_fence")
     let g:vmt_dont_insert_fence = 0
 endif
 
+if !exists("g:vmt_list_item_char")
+    let g:vmt_list_item_char = '-'
+endif
+
+if !exists("g:vmt_list_indent_text")
+    let g:vmt_list_indent_text = '  '
+endif
+
 if !exists("g:vmt_cycle_list_item_markers")
     let g:vmt_cycle_list_item_markers = 0
 endif
@@ -180,7 +188,7 @@ endfunction
 function! s:GenToc(markdownStyle)
     let l:headingLines = <SID>GetHeadingLines()
     let l:levels = []
-    let l:listItemChars = ['*']
+    let l:listItemChars = [g:vmt_list_item_char]
 
     let g:GFMHeadingIds = {}
     
@@ -195,7 +203,7 @@ function! s:GenToc(markdownStyle)
     endif
 
     if g:vmt_cycle_list_item_markers == 1
-        let l:listItemChars += ['-', '+']
+        let l:listItemChars = ['*', '-', '+']
     endif
 
     let l:i = 0
@@ -228,6 +236,9 @@ function! s:GenToc(markdownStyle)
 endfunction
 
 function! s:GetIndentText()
+    if !empty(g:vmt_list_indent_text)
+        return g:vmt_list_indent_text
+    endif
     if &expandtab
         return repeat(" ", &shiftwidth)
     else
