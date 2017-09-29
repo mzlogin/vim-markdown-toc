@@ -341,7 +341,7 @@ function! s:DeleteExistingToc()
 
         if search(l:tocEndPattern, l:flags) != 0
             let l:markdownStyle = matchlist(l:beginLine, l:tocBeginPattern)[1]
-            if l:markdownStyle != "GFM" && l:markdownStyle != "Redcarpet"
+            if l:markdownStyle != "GFM" && l:markdownStyle != "Redcarpet" && l:markdownStyle != "GitLab"
                 let l:markdownStyle = "Unknown"
             else
                 let l:endLineNumber = line(".")
