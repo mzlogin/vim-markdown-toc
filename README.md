@@ -7,6 +7,7 @@ A vim 7.4+ plugin to generate table of contents for Markdown files.
 ## Table of Contents
 
 <!-- vim-markdown-toc GFM -->
+
 * [Features](#features)
 * [Installation](#installation)
 * [Usage](#usage)
@@ -26,6 +27,7 @@ A vim 7.4+ plugin to generate table of contents for Markdown files.
   Supported Markdown parsers:
 
   - [x] GFM (GitHub Flavored Markdown)
+  - [x] GitLab
   - [x] Redcarpet
 
 * Update existing table of contents.
@@ -65,6 +67,12 @@ Move the cursor to the line you want to append table of contents, then type a co
     Generate table of contents in [Redcarpet][3] link style.
 
     This command is suitable for Jekyll or anywhere else use Redcarpet as its Markdown parser.
+
+3. `:GenTocGitLab`
+
+    Generate table of contents in [GitLab][9] link style.
+
+    This command is suitable for GitLab repository and wiki.
 
 You can view [here][1] to know differences between *GFM* and *Redcarpet* style toc links.
 
@@ -160,3 +168,4 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 [6]: https://github.com/mzlogin/awesome-adb
 [7]: http://mazhuang.org/2015/12/19/vim-markdown-toc/
 [8]: https://github.com/junegunn/vim-plug
+[9]: https://docs.gitlab.com/ee/user/markdown.html

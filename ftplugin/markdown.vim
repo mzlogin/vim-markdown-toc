@@ -147,6 +147,34 @@ function! s:GetHeadingLinkGFM(headingName)
     return l:headingLink
 endfunction
 
+" suppport for GitLab, fork of GetHeadingLinkGFM
+" it's dirty to copy & paste code but more clear for maintain
+function! s:GetHeadingLinkGitLab(headingName)
+    let l:headingLink = tolower(a:headingName)
+
+    let l:headingLink = substitute(l:headingLink, "\\_^_\\+\\|_\\+\\_$", "", "g")
+    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u00C0-\u00FF\u4e00-\u9fbf _-]", "", "g")
+    let l:headingLink = substitute(l:headingLink, " ", "-", "g")
+    let l:headingLink = substitute(l:headingLink, "-\\{2,}", "-", "g")
+
+    if l:headingLink ==# ""
+        let l:nullKey = "<null>"
+        if has_key(g:GFMHeadingIds, l:nullKey)
+            let g:GFMHeadingIds[l:nullKey] += 1
+            let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:nullKey]
+        else
+            let g:GFMHeadingIds[l:nullKey] = 0
+        endif
+    elseif has_key(g:GFMHeadingIds, l:headingLink)
+        let g:GFMHeadingIds[l:headingLink] += 1
+        let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:headingLink]
+    else
+        let g:GFMHeadingIds[l:headingLink] = 0
+    endif
+
+    return l:headingLink
+endfunction
+
 function! s:GetHeadingLinkRedcarpet(headingName)
     let l:headingLink = tolower(a:headingName)
 
@@ -177,6 +205,8 @@ function! s:GetHeadingLink(headingName, markdownStyle)
         return <SID>GetHeadingLinkGFM(a:headingName)
     elseif a:markdownStyle ==# "Redcarpet"
         return <SID>GetHeadingLinkRedcarpet(a:headingName)
+    elseif a:markdownStyle ==# "GitLab"
+        return <SID>GetHeadingLinkGitLab(a:headingName)
     endif
 endfunction
 
@@ -322,7 +352,7 @@ function! s:DeleteExistingToc()
 
         if search(l:tocEndPattern, l:flags) != 0
             let l:markdownStyle = matchlist(l:beginLine, l:tocBeginPattern)[1]
-            if l:markdownStyle != "GFM" && l:markdownStyle != "Redcarpet"
+            if l:markdownStyle != "GFM" && l:markdownStyle != "Redcarpet" && l:markdownStyle != "GitLab"
                 let l:markdownStyle = "Unknown"
             else
                 let l:endLineNumber = line(".")
@@ -341,6 +371,7 @@ function! s:DeleteExistingToc()
 endfunction
 
 command! GenTocGFM :call <SID>GenToc("GFM")
+command! GenTocGitLab :call <SID>GenToc("GitLab")
 command! GenTocRedcarpet :call <SID>GenToc("Redcarpet")
 command! UpdateToc :call <SID>UpdateToc()
 command! RemoveToc :call <SID>DeleteExistingToc()

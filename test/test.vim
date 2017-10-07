@@ -40,6 +40,32 @@ call ASSERT(GetHeadingLinkTest("### ![](/path/to/a/png)", "GFM") ==# "-2")
 call ASSERT(GetHeadingLinkTest("### 1.1", "GFM") ==# "11")
 call ASSERT(GetHeadingLinkTest("### heading with some \"special\" \(yes, special\) chars: les caractères unicodes", "GFM") ==# "heading-with-some-special-yes-special-chars-les-caractères-unicodes")
 
+" GitLab Test Cases
+
+let g:GFMHeadingIds = {}
+
+call ASSERT(GetHeadingLinkTest("# 你好！", "GitLab") ==# "你好")
+call ASSERT(GetHeadingLinkTest("## Hello World", "GitLab") ==# "hello-world")
+call ASSERT(GetHeadingLinkTest("### Hello World", "GitLab") ==# "hello-world-1")
+call ASSERT(GetHeadingLinkTest("#### `Hello World`", "GitLab") ==# "hello-world-2")
+call ASSERT(GetHeadingLinkTest("##### _Hello_World_", "GitLab") ==# "hello_world")
+call ASSERT(GetHeadingLinkTest("###### ,", "GitLab") ==# "")
+call ASSERT(GetHeadingLinkTest("# ,", "GitLab") ==# "-1")
+call ASSERT(GetHeadingLinkTest("## No additional spaces before / after punctuation in fullwidth form", "GitLab") ==# "no-additional-spaces-before-after-punctuation-in-fullwidth-form")
+call ASSERT(GetHeadingLinkTest("### No additional spaces before/after punctuation in fullwidth form", "GitLab") ==# "no-additional-spaces-beforeafter-punctuation-in-fullwidth-form")
+call ASSERT(GetHeadingLinkTest("####   Hello    Markdown    ", "GitLab") ==# "hello-markdown")
+call ASSERT(GetHeadingLinkTest("####Heading without a space after the hashes", "GitLab") ==# "heading-without-a-space-after-the-hashes")
+call ASSERT(GetHeadingLinkTest("### heading with trailing hashes ###", "GitLab") ==# "heading-with-trailing-hashes")
+call ASSERT(GetHeadingLinkTest("### heading with trailing hashes###", "GitLab") ==# "heading-with-trailing-hashes-1")
+call ASSERT(GetHeadingLinkTest("### heading with trailing hashes ends with spaces ###  ", "GitLab") ==# "heading-with-trailing-hashes-ends-with-spaces-")
+call ASSERT(GetHeadingLinkTest("### heading with trailing hashes nested with spaces # #  #  ", "GitLab") ==# "heading-with-trailing-hashes-nested-with-spaces-")
+call ASSERT(GetHeadingLinkTest("### [vim-markdown-toc](https://github.com/mzlogin/vim-markdown-toc)", "GitLab") ==# "vim-markdown-toc")
+call ASSERT(GetHeadingLinkTest("### [vim-markdown-toc-again][1]", "GitLab") ==# "vim-markdown-toc-again")
+call ASSERT(GetHeadingLinkTest("### ![vim-markdown-toc-img](/path/to/a/png)", "GitLab") ==# "vim-markdown-toc-img")
+call ASSERT(GetHeadingLinkTest("### ![](/path/to/a/png)", "GitLab") ==# "-2")
+call ASSERT(GetHeadingLinkTest("### 1.1", "GitLab") ==# "11")
+call ASSERT(GetHeadingLinkTest("### heading with some \"special\" \(yes, special\) chars: les caractères unicodes", "GitLab") ==# "heading-with-some-special-yes-special-chars-les-caractères-unicodes")
+
 " Redcarpet Test Cases
 call ASSERT(GetHeadingLinkTest("# -Hello-World-", "Redcarpet") ==# "hello-world")
 call ASSERT(GetHeadingLinkTest("## _Hello_World_", "Redcarpet") ==# "hello_world")
