@@ -19,7 +19,7 @@ if !exists("g:vmt_list_item_char")
 endif
 
 if !exists("g:vmt_list_indent_text")
-    let g:vmt_list_indent_text = '  '
+    let g:vmt_list_indent_text = ''
 endif
 
 if !exists("g:vmt_cycle_list_item_markers")
