@@ -15,7 +15,7 @@ if !exists("g:vmt_dont_insert_fence")
 endif
 
 if !exists("g:vmt_list_item_char")
-    let g:vmt_list_item_char = '-'
+    let g:vmt_list_item_char = '*'
 endif
 
 if !exists("g:vmt_list_indent_text")
