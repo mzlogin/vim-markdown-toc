@@ -13,7 +13,7 @@
     * [1.1 heading with dot 2.1](#11-heading-with-dot-21)
     * [1.1](#11)
         * [heading with some "special" (yes, special) chars: les caractères unicodes](#heading-with-some-special-yes-special-chars-les-caractères-unicodes)
-    * [heading with Cyrillic Б б](#heading-with-cyrillic--)
+    * [heading with Cyrillic Б б](#heading-with-cyrillic-Б-б)
 
 <!-- vim-markdown-toc -->
 
