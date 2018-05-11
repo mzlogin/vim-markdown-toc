@@ -322,10 +322,10 @@ endfunction
 function! s:GetMarkdownStyleInModeline()
     let l:myFileType = &filetype
     let l:lst = split(l:myFileType, "\\.")
-    if len(l:lst) == 2 && l:lst[1] ==# "markdown" && index(s:supportMarkdownStyles, l:lst[0]) != -1
+    if len(l:lst) == 2 && l:lst[1] ==# "markdown"
         return l:lst[0]
     else
-        return ""
+        return "Unknown"
     endif
 endfunction
 
