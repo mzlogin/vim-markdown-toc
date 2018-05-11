@@ -402,8 +402,6 @@ function! s:DeleteExistingToc()
                 let l:markdownStyle = "Unknown"
             else
                 let l:endLineNumber = line(".")
-                echo l:beginLineNumber
-                echo l:endLineNumber
                 execute l:beginLineNumber. "," . l:endLineNumber. "delete_"
             end
         else
