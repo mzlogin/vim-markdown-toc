@@ -14,6 +14,10 @@ if !exists("g:vmt_dont_insert_fence")
     let g:vmt_dont_insert_fence = 0
 endif
 
+if !exists("g:vmt_fence_text")
+    let g:vmt_fence_text = 'vim-markdown-toc'
+endif
+
 if !exists("g:vmt_list_item_char")
     let g:vmt_list_item_char = '*'
 endif
@@ -277,15 +281,15 @@ function! s:GetIndentText()
 endfunction
 
 function! s:GetBeginFence(markdownStyle)
-    return "<!-- vim-markdown-toc " . a:markdownStyle . " -->"
+    return "<!-- ". g:vmt_fence_text . " " . a:markdownStyle . " -->"
 endfunction
 
 function! s:GetEndFence()
-    return "<!-- vim-markdown-toc -->"
+    return "<!-- " . g:vmt_fence_text . " -->"
 endfunction
 
 function! s:GetBeginFencePattern()
-    return "<!-- vim-markdown-toc \\([[:alpha:]]\\+\\) -->"
+    return "<!-- " . g:vmt_fence_text . " \\([[:alpha:]]\\+\\) -->"
 endfunction
 
 function! s:GetEndFencePattern()

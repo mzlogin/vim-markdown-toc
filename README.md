@@ -146,6 +146,12 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
    This renders the same according to Markdown rules, but might appeal to those who care about readability of the source.
 
+4. `g:vmt_list_item_char`
+
+    default: `*`
+
+    The list item marker, it can be `*`, `-` or `+`.
+
 ## Screenshots
 
 * [online demo in English][5]
