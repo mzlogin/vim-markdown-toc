@@ -46,7 +46,7 @@ function! s:GetSections(beginRegex, endRegex)
     let l:winview = winsaveview()
     let l:sections = {}
 
-    normal! gg
+    keepjumps normal! gg
     let l:flags = "Wc"
     let l:beginLine = 0
     let l:regex = a:beginRegex
@@ -356,7 +356,7 @@ function! s:UpdateToc()
 
         if l:isFirstLine != 0
             call cursor(l:beginLineNumber, 1)
-            normal! "_dd
+            delete _
         endif
 
         " fix line number to avoid shake
@@ -373,7 +373,7 @@ endfunction
 function! s:DeleteExistingToc()
     let l:winview = winsaveview()
 
-    normal! gg
+    keepjumps normal! gg
 
     let l:markdownStyle = <SID>GetMarkdownStyleInModeline()
     
@@ -402,7 +402,7 @@ function! s:DeleteExistingToc()
                 let l:markdownStyle = "Unknown"
             else
                 let l:endLineNumber = line(".")
-                execute l:beginLineNumber. "," . l:endLineNumber. "delete_"
+                silent execute l:beginLineNumber. "," . l:endLineNumber. "delete_"
             end
         else
             let l:markdownStyle = ""
