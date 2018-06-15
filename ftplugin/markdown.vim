@@ -46,7 +46,7 @@ function! s:GetSections(beginRegex, endRegex)
     let l:winview = winsaveview()
     let l:sections = {}
 
-    keepjumps normal! gg
+    keepjumps normal! gg0
     let l:flags = "Wc"
     let l:beginLine = 0
     let l:regex = a:beginRegex
@@ -373,7 +373,7 @@ endfunction
 function! s:DeleteExistingToc()
     let l:winview = winsaveview()
 
-    keepjumps normal! gg
+    keepjumps normal! gg0
 
     let l:markdownStyle = <SID>GetMarkdownStyleInModeline()
     
