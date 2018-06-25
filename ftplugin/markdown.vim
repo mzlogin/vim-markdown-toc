@@ -248,7 +248,7 @@ function! s:GenTocInner(markdownStyle, isModeline)
     let l:minLevel = min(l:levels)
 
     if g:vmt_dont_insert_fence == 0
-        put =<SID>GetBeginFence(a:markdownStyle, a:isModeline)
+        silent put =<SID>GetBeginFence(a:markdownStyle, a:isModeline)
     endif
 
     if g:vmt_cycle_list_item_markers == 1
@@ -258,7 +258,7 @@ function! s:GenTocInner(markdownStyle, isModeline)
     let l:i = 0
     " a black line before toc
     if !empty(l:headingLines)
-        put =''
+        silent put =''
     endif
     for headingLine in l:headingLines
         let l:headingName = <SID>GetHeadingName(headingLine)
@@ -271,16 +271,16 @@ function! s:GenTocInner(markdownStyle, isModeline)
         let l:heading = l:heading . " [" . l:headingName . "]"
         let l:heading = l:heading . "(#" . l:headingLink . ")"
 
-        put =l:heading
+        silent put =l:heading
 
         let l:i += 1
     endfor
 
     " a blank line after toc to avoid effect typo of content below
-    put =''
+    silent put =''
 
     if g:vmt_dont_insert_fence == 0
-        put =<SID>GetEndFence()
+        silent put =<SID>GetEndFence()
     endif
 endfunction
 
