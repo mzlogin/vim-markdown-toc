@@ -32,11 +32,12 @@ endif
 
 let g:GFMHeadingIds = {}
 
-let s:supportMarkdownStyles = ['GFM', 'Redcarpet', 'GitLab']
+let s:supportMarkdownStyles = ['GFM', 'Redcarpet', 'GitLab', 'Marked']
 
 let s:GFM_STYLE_INDEX = 0
 let s:REDCARPET_STYLE_INDEX = 1
 let s:GITLAB_STYLE_INDEX = 2
+let s:MARKED_STYLE_INDEX = 3
 
 function! s:HeadingLineRegex()
     return '\v(^.+$\n^\=+$|^.+$\n^\-+$|^#{1,6})'
@@ -200,6 +201,21 @@ function! s:GetHeadingLinkRedcarpet(headingName)
     return l:headingLink
 endfunction
 
+function! s:GetHeadingLinkMarked(headingName)
+    let l:headingLink = tolower(a:headingName)
+
+    let l:headingLink = substitute(l:headingLink, "<[^>]\\+>", "", "g")
+    let l:headingLink = substitute(l:headingLink, "&", "&amp;", "g")
+    let l:headingLink = substitute(l:headingLink, "\"", "&quot;", "g")
+    let l:headingLink = substitute(l:headingLink, "'", "&#39;", "g")
+
+    let l:headingLink = substitute(l:headingLink, "[ \\-&+\\$,/:;=?@\"#{}|\\^\\~\\[\\]`\\*()%!']\\+", "-", "g")
+    let l:headingLink = substitute(l:headingLink, "-\\{2,}", "-", "g")
+    let l:headingLink = substitute(l:headingLink, "\\%^[\\-_]\\+\\|[\\-_]\\+\\%$", "", "g")
+
+    return l:headingLink
+endfunction
+
 function! s:GetHeadingName(headingLine)
     let l:headingName = substitute(a:headingLine, '^#*\s*', "", "")
     let l:headingName = substitute(l:headingName, '\s*#*$', "", "")
@@ -217,6 +233,8 @@ function! s:GetHeadingLink(headingName, markdownStyle)
         return <SID>GetHeadingLinkRedcarpet(a:headingName)
     elseif a:markdownStyle ==# s:supportMarkdownStyles[s:GITLAB_STYLE_INDEX]
         return <SID>GetHeadingLinkGitLab(a:headingName)
+    elseif a:markdownStyle ==# s:supportMarkdownStyles[s:MARKED_STYLE_INDEX]
+        return <SID>GetHeadingLinkMarked(a:headingName)
     endif
 endfunction
 
@@ -421,6 +439,7 @@ endfunction
 command! GenTocGFM :call <SID>GenToc(s:supportMarkdownStyles[s:GFM_STYLE_INDEX])
 command! GenTocGitLab :call <SID>GenToc(s:supportMarkdownStyles[s:GITLAB_STYLE_INDEX])
 command! GenTocRedcarpet :call <SID>GenToc(s:supportMarkdownStyles[s:REDCARPET_STYLE_INDEX])
+command! GenTocMarked :call <SID>GenToc(s:supportMarkdownStyles[s:MARKED_STYLE_INDEX])
 command! GenTocModeline :call <SID>GenTocInner(<SID>GetMarkdownStyleInModeline(), 1)
 command! UpdateToc :call <SID>UpdateToc()
 command! RemoveToc :call <SID>DeleteExistingToc()

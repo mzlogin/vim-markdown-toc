@@ -74,6 +74,10 @@ Move the cursor to the line you want to append table of contents, then type a co
 
     This command is suitable for GitLab repository and wiki.
 
+4. `:GenTocMarked`
+
+    Generate table of contents for [iamcco/markdown-preview.vim][10] which use [Marked][11] markdown parser.
+
 You can view [here][1] to know differences between *GFM* and *Redcarpet* style toc links.
 
 ### Update existing table of contents
@@ -175,3 +179,5 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 [7]: http://mazhuang.org/2015/12/19/vim-markdown-toc/
 [8]: https://github.com/junegunn/vim-plug
 [9]: https://docs.gitlab.com/ee/user/markdown.html
+[10]:https://github.com/iamcco/markdown-preview.vim
+[11]:https://github.com/markedjs/marked
