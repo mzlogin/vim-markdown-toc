@@ -436,13 +436,13 @@ function! s:DeleteExistingToc()
     return [l:markdownStyle, l:beginLineNumber, l:endLineNumber, l:isModeline]
 endfunction
 
-command! GenTocGFM :call <SID>GenToc(s:supportMarkdownStyles[s:GFM_STYLE_INDEX])
-command! GenTocGitLab :call <SID>GenToc(s:supportMarkdownStyles[s:GITLAB_STYLE_INDEX])
-command! GenTocRedcarpet :call <SID>GenToc(s:supportMarkdownStyles[s:REDCARPET_STYLE_INDEX])
-command! GenTocMarked :call <SID>GenToc(s:supportMarkdownStyles[s:MARKED_STYLE_INDEX])
-command! GenTocModeline :call <SID>GenTocInner(<SID>GetMarkdownStyleInModeline(), 1)
-command! UpdateToc :call <SID>UpdateToc()
-command! RemoveToc :call <SID>DeleteExistingToc()
+command! TocGenGFM :call <SID>GenToc(s:supportMarkdownStyles[s:GFM_STYLE_INDEX])
+command! TocGenGitLab :call <SID>GenToc(s:supportMarkdownStyles[s:GITLAB_STYLE_INDEX])
+command! TocGenRedcarpet :call <SID>GenToc(s:supportMarkdownStyles[s:REDCARPET_STYLE_INDEX])
+command! TocGenMarked :call <SID>GenToc(s:supportMarkdownStyles[s:MARKED_STYLE_INDEX])
+command! TocGenModeline :call <SID>GenTocInner(<SID>GetMarkdownStyleInModeline(), 1)
+command! TocUpdate :call <SID>UpdateToc()
+command! TocRemove :call <SID>DeleteExistingToc()
 
 if g:vmt_auto_update_on_save == 1
     autocmd BufWritePre *.{md,mdown,mkd,mkdn,markdown,mdwn} :silent! UpdateToc
