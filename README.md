@@ -1,5 +1,7 @@
 # vim-markdown-toc
 
+A folk to help the original plugin work with [plasticboy/vim-markdown](https://github.com/plasticboy/vim-markdown)
+
 A vim 7.4+ plugin to generate table of contents for Markdown files.
 
 [中文版使用指南][7]
@@ -56,25 +58,25 @@ Installation with [vim-plug][8] is likeness.
 
 Move the cursor to the line you want to append table of contents, then type a command below suit you. The command will generate **headings after the cursor** into table of contents.
 
-1. `:GenTocGFM`
+1. `:TocGenGFM`
 
     Generate table of contents in [GFM][2] link style.
 
     This command is suitable for Markdown files in GitHub repositories, like `README.md`, and Markdown files for GitBook.
 
-2. `:GenTocRedcarpet`
+2. `:TocGenRedcarpet`
 
     Generate table of contents in [Redcarpet][3] link style.
 
     This command is suitable for Jekyll or anywhere else use Redcarpet as its Markdown parser.
 
-3. `:GenTocGitLab`
+3. `:TocGenGitLab`
 
     Generate table of contents in [GitLab][9] link style.
 
     This command is suitable for GitLab repository and wiki.
 
-4. `:GenTocMarked`
+4. `:TocGenMarked`
 
     Generate table of contents for [iamcco/markdown-preview.vim][10] which use [Marked][11] markdown parser.
 
@@ -84,11 +86,11 @@ You can view [here][1] to know differences between *GFM* and *Redcarpet* style t
 
 Generally you don't need to do this manually, existing table of contents will auto update on save by default.
 
-The `:UpdateToc` command, which is designed to update toc manually, can only work when `g:vmt_auto_update_on_save` turned off, and keep insert fence.
+The `:TocUpdate` command, which is designed to update toc manually, can only work when `g:vmt_auto_update_on_save` turned off, and keep insert fence.
 
 ### Remove table of contents
 
-`:RemoveToc` command will do this for you, just remember keep insert fence option by default.
+`:TocRemove` command will do this for you, just remember keep insert fence option by default.
 
 ## Options
 
@@ -108,7 +110,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
    default: 0
 
-   By default, the `:GenTocXXX` commands will add `<!-- vim-markdown-toc -->` fence to the table of contents, it is designed for feature of auto update table of contents on save and `:UpdateToc` command, it won't effect what your Markdown file looks like after parse.
+   By default, the `:TocGenXXX` commands will add `<!-- vim-markdown-toc -->` fence to the table of contents, it is designed for feature of auto update table of contents on save and `:TocUpdate` command, it won't effect what your Markdown file looks like after parse.
 
    If you don't like this, you can remove the fence by add the following line to your vimrc file:
 
@@ -116,7 +118,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
    let g:vmt_dont_insert_fence = 1
    ```
 
-   But then you will lose the convenience of auto update tables of contents on save and `:UpdateToc` command. When you want to update toc, you need to remove existing toc manually and rerun `:GenTocXXX` commands.
+   But then you will lose the convenience of auto update tables of contents on save and `:TocUpdate` command. When you want to update toc, you need to remove existing toc manually and rerun `:TocGenXXX` commands.
 
 3. `g:vmt_cycle_list_item_markers`
 
