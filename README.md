@@ -136,7 +136,13 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
    <!-- /TOC -->
    ```
 
-5. `g:vmt_cycle_list_item_markers`
+5. `g:vmt_fence_hidden_markdown_style`
+
+   default: `''`
+
+   By default, _vim-markdown-toc_ will add the markdown style into the fence of the text for the table of contents. You can avoid this and set a default markdown style with `g:vmt_fence_hidden_markdown_style` that is applied if a fence is found containing the `g:vmt_fence_text` without any markdown style. Obviously, `g:vmt_fence_hidden_markdown_style` has to be supported, i.e. currently one of `['GFM', 'Redcarpet', 'GitLab', 'Marked']`.
+
+6. `g:vmt_cycle_list_item_markers`
 
    default: 0
 
@@ -168,7 +174,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
    This renders the same according to Markdown rules, but might appeal to those who care about readability of the source.
 
-6. `g:vmt_list_item_char`
+7. `g:vmt_list_item_char`
 
     default: `*`
 
