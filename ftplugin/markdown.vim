@@ -18,6 +18,10 @@ if !exists("g:vmt_fence_text")
     let g:vmt_fence_text = 'vim-markdown-toc'
 endif
 
+if !exists("g:vmt_fence_closing_text")
+    let g:vmt_fence_closing_text = g:vmt_fence_text
+endif
+
 if !exists("g:vmt_list_item_char")
     let g:vmt_list_item_char = '*'
 endif
@@ -315,26 +319,26 @@ endfunction
 
 function! s:GetBeginFence(markdownStyle, isModeline)
     if a:isModeline != 0
-        return <SID>GetEndFence()
+        return "<!-- " . g:vmt_fence_text . " -->"
     else
         return "<!-- ". g:vmt_fence_text . " " . a:markdownStyle . " -->"
     endif
 endfunction
 
 function! s:GetEndFence()
-    return "<!-- " . g:vmt_fence_text . " -->"
+    return "<!-- " . g:vmt_fence_closing_text . " -->"
 endfunction
 
 function! s:GetBeginFencePattern(isModeline)
     if a:isModeline != 0
-        return <SID>GetEndFencePattern()
+        return "<!-- " . g:vmt_fence_text . " -->"
     else
         return "<!-- " . g:vmt_fence_text . " \\([[:alpha:]]\\+\\) -->"
     endif
 endfunction
 
 function! s:GetEndFencePattern()
-    return <SID>GetEndFence()
+    return "<!-- " . g:vmt_fence_closing_text . " -->"
 endfunction
 
 function! s:GetMarkdownStyleInModeline()

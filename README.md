@@ -118,7 +118,25 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
    But then you will lose the convenience of auto update tables of contents on save and `:UpdateToc` command. When you want to update toc, you need to remove existing toc manually and rerun `:GenTocXXX` commands.
 
-3. `g:vmt_cycle_list_item_markers`
+3. `g:vmt_fence_text`
+
+   default: `vim-markdown-toc`
+
+   Inner text of the fence marker for the table of contents, see `g:vmt_dont_insert_fence`.
+
+4. `g:vmt_fence_closing_text`
+
+   default: `g:vmt_fence_text`
+
+   Inner text of the closing fence marker. E.g., you could `let g:vmt_fence_text = 'TOC'` and `let g:vmt_fence_closing_text = '/TOC'` to get
+
+   ```
+   <!-- TOC -->
+   [TOC]
+   <!-- /TOC -->
+   ```
+
+5. `g:vmt_cycle_list_item_markers`
 
    default: 0
 
@@ -150,7 +168,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
    This renders the same according to Markdown rules, but might appeal to those who care about readability of the source.
 
-4. `g:vmt_list_item_char`
+6. `g:vmt_list_item_char`
 
     default: `*`
 
