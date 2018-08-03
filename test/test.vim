@@ -77,4 +77,11 @@ call ASSERT(GetHeadingLinkTest("###### '你好'世界'", "Redcarpet") ==# "39-�
 call ASSERT(GetHeadingLinkTest("# &你好&世界&", "Redcarpet") ==# "amp-你好-amp-世界-amp")
 call ASSERT(GetHeadingLinkTest("## `-ms-text-autospace` to the rescue?", "Redcarpet") ==# "ms-text-autospace-to-the-rescue")
 
+"
+" Marked Test Cases {{{
+call ASSERT(GetHeadingLinkTest("# Book", "Marked") ==# "Book")
+call ASSERT(GetHeadingLinkTest("# Chapter One Introduction", "Marked") ==# "Chapter-One-Introduction")
+call ASSERT(GetHeadingLinkTest("## Section 1.2 Beginners", "Marked") ==# "Section-1.2-Beginners")
+" }}}
+
 echo "" . g:passCaseCount . " cases pass, " . g:errorCaseCount . " cases error"

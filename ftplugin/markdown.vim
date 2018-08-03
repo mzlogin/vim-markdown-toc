@@ -204,14 +204,7 @@ endfunction
 function! s:GetHeadingLinkMarked(headingName)
     let l:headingLink = tolower(a:headingName)
 
-    let l:headingLink = substitute(l:headingLink, "<[^>]\\+>", "", "g")
-    let l:headingLink = substitute(l:headingLink, "&", "&amp;", "g")
-    let l:headingLink = substitute(l:headingLink, "\"", "&quot;", "g")
-    let l:headingLink = substitute(l:headingLink, "'", "&#39;", "g")
-
-    let l:headingLink = substitute(l:headingLink, "[ \\-&+\\$,/:;=?@\"#{}|\\^\\~\\[\\]`\\*()%!']\\+", "-", "g")
-    let l:headingLink = substitute(l:headingLink, "-\\{2,}", "-", "g")
-    let l:headingLink = substitute(l:headingLink, "\\%^[\\-_]\\+\\|[\\-_]\\+\\%$", "", "g")
+    let l:headingLink = substitute(l:headingLink, "[ ]\\+", "-", "g")
 
     return l:headingLink
 endfunction
