@@ -18,6 +18,14 @@ if !exists("g:vmt_fence_text")
     let g:vmt_fence_text = 'vim-markdown-toc'
 endif
 
+if !exists("g:vmt_fence_closing_text")
+    let g:vmt_fence_closing_text = g:vmt_fence_text
+endif
+
+if !exists("g:vmt_fence_hidden_markdown_style")
+    let g:vmt_fence_hidden_markdown_style = ''
+endif
+
 if !exists("g:vmt_list_item_char")
     let g:vmt_list_item_char = '*'
 endif
@@ -308,26 +316,26 @@ endfunction
 
 function! s:GetBeginFence(markdownStyle, isModeline)
     if a:isModeline != 0
-        return <SID>GetEndFence()
+        return "<!-- " . g:vmt_fence_text . " -->"
     else
         return "<!-- ". g:vmt_fence_text . " " . a:markdownStyle . " -->"
     endif
 endfunction
 
 function! s:GetEndFence()
-    return "<!-- " . g:vmt_fence_text . " -->"
+    return "<!-- " . g:vmt_fence_closing_text . " -->"
 endfunction
 
 function! s:GetBeginFencePattern(isModeline)
     if a:isModeline != 0
-        return <SID>GetEndFencePattern()
+        return "<!-- " . g:vmt_fence_text . " -->"
     else
-        return "<!-- " . g:vmt_fence_text . " \\([[:alpha:]]\\+\\) -->"
+        return "<!-- " . g:vmt_fence_text . " \\([[:alpha:]]\\+\\)\\? \\?-->"
     endif
 endfunction
 
 function! s:GetEndFencePattern()
-    return <SID>GetEndFence()
+    return "<!-- " . g:vmt_fence_closing_text . " -->"
 endfunction
 
 function! s:GetMarkdownStyleInModeline()
@@ -409,9 +417,20 @@ function! s:DeleteExistingToc()
                 let l:markdownStyle = matchlist(l:beginLine, l:tocBeginPattern)[1]
             endif
 
+            let l:doDelete = 0
             if index(s:supportMarkdownStyles, l:markdownStyle) == -1
-                let l:markdownStyle = "Unknown"
+                if l:markdownStyle ==# "" && index(s:supportMarkdownStyles, g:vmt_fence_hidden_markdown_style) != -1
+                    let l:markdownStyle = g:vmt_fence_hidden_markdown_style
+                    let l:isModeline = 1
+                    let l:doDelete = 1
+                else
+                    let l:markdownStyle = "Unknown"
+                endif
             else
+                let l:doDelete = 1
+            endif
+
+            if l:doDelete == 1
                 let l:endLineNumber = line(".")
                 silent execute l:beginLineNumber. "," . l:endLineNumber. "delete_"
             end
