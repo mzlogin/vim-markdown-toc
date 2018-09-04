@@ -40,12 +40,13 @@ endif
 
 let g:GFMHeadingIds = {}
 
-let s:supportMarkdownStyles = ['GFM', 'Redcarpet', 'GitLab', 'Marked']
+let s:supportMarkdownStyles = ['GFM', 'Redcarpet', 'GitLab', 'Marked', 'Bitbucket']
 
 let s:GFM_STYLE_INDEX = 0
 let s:REDCARPET_STYLE_INDEX = 1
 let s:GITLAB_STYLE_INDEX = 2
 let s:MARKED_STYLE_INDEX = 3
+let s:BITBUCKET_STYLE_INDEX = 4
 
 function! s:HeadingLineRegex()
     return '\v(^.+$\n^\=+$|^.+$\n^\-+$|^#{1,6})'
@@ -217,6 +218,10 @@ function! s:GetHeadingLinkMarked(headingName)
     return l:headingLink
 endfunction
 
+function! s:GetHeadingLinkBB(headingName)
+    return "markdown-header-" . <SID>GetHeadingLinkGFM(a:headingName)
+endfunction
+
 function! s:GetHeadingName(headingLine)
     let l:headingName = substitute(a:headingLine, '^#*\s*', "", "")
     let l:headingName = substitute(l:headingName, '\s*#*$', "", "")
@@ -236,6 +241,8 @@ function! s:GetHeadingLink(headingName, markdownStyle)
         return <SID>GetHeadingLinkGitLab(a:headingName)
     elseif a:markdownStyle ==# s:supportMarkdownStyles[s:MARKED_STYLE_INDEX]
         return <SID>GetHeadingLinkMarked(a:headingName)
+    elseif a:markdownStyle ==# s:supportMarkdownStyles[s:BITBUCKET_STYLE_INDEX]
+        return <SID>GetHeadingLinkBB(a:headingName)
     endif
 endfunction
 
@@ -259,14 +266,15 @@ function! s:GenTocInner(markdownStyle, isModeline)
     let l:listItemChars = [g:vmt_list_item_char]
 
     let g:GFMHeadingIds = {}
-    
+
     for headingLine in l:headingLines
         call add(l:levels, <SID>GetHeadingLevel(headingLine))
     endfor
 
     let l:minLevel = min(l:levels)
 
-    if g:vmt_dont_insert_fence == 0
+    " Bitbucket doesn't support HTML comments, therefore TOC fencing cannot work
+    if g:vmt_dont_insert_fence == 0 && a:markdownStyle != "Bitbucket"
         silent put =<SID>GetBeginFence(a:markdownStyle, a:isModeline)
     endif
 
@@ -298,7 +306,7 @@ function! s:GenTocInner(markdownStyle, isModeline)
     " a blank line after toc to avoid effect typo of content below
     silent put =''
 
-    if g:vmt_dont_insert_fence == 0
+    if g:vmt_dont_insert_fence == 0 && a:markdownStyle != "Bitbucket"
         silent put =<SID>GetEndFence()
     endif
 endfunction
@@ -395,7 +403,7 @@ function! s:DeleteExistingToc()
     keepjumps normal! gg0
 
     let l:markdownStyle = <SID>GetMarkdownStyleInModeline()
-    
+
     let l:isModeline = 0
 
     if index(s:supportMarkdownStyles, l:markdownStyle) != -1
@@ -448,6 +456,7 @@ function! s:DeleteExistingToc()
     return [l:markdownStyle, l:beginLineNumber, l:endLineNumber, l:isModeline]
 endfunction
 
+command! GenTocBB :call <SID>GenToc(s:supportMarkdownStyles[s:BITBUCKET_STYLE_INDEX])
 command! GenTocGFM :call <SID>GenToc(s:supportMarkdownStyles[s:GFM_STYLE_INDEX])
 command! GenTocGitLab :call <SID>GenToc(s:supportMarkdownStyles[s:GITLAB_STYLE_INDEX])
 command! GenTocRedcarpet :call <SID>GenToc(s:supportMarkdownStyles[s:REDCARPET_STYLE_INDEX])
