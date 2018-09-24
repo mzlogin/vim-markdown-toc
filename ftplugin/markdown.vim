@@ -457,5 +457,5 @@ command! UpdateToc :call <SID>UpdateToc()
 command! RemoveToc :call <SID>DeleteExistingToc()
 
 if g:vmt_auto_update_on_save == 1
-    autocmd BufWritePre *.{md,mdown,mkd,mkdn,markdown,mdwn} :silent! if !&diff | UpdateToc | endif
+    autocmd BufWritePre *.{md,mdown,mkd,mkdn,markdown,mdwn} :silent! if !&diff <bar> UpdateToc <bar> endif
 endif
