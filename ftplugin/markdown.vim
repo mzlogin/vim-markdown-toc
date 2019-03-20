@@ -38,6 +38,10 @@ if !exists("g:vmt_cycle_list_item_markers")
     let g:vmt_cycle_list_item_markers = 0
 endif
 
+if !exists("g:vmt_include_headings_before")
+    let g:vmt_include_headings_before = 0
+endif
+
 let g:GFMHeadingIds = {}
 
 let s:supportMarkdownStyles = ['GFM', 'Redcarpet', 'GitLab', 'Marked']
@@ -103,8 +107,13 @@ function! s:GetHeadingLines()
     let l:headingLines = []
     let l:codeSections = <SID>GetCodeSections()
 
-    let l:headingLineRegex = <SID>HeadingLineRegex()
     let l:flags = "W"
+    if g:vmt_include_headings_before == 1
+        keepjumps normal! gg0
+        let l:flags = "Wc"
+    endif
+
+    let l:headingLineRegex = <SID>HeadingLineRegex()
 
     while search(l:headingLineRegex, l:flags) != 0
         let l:line = getline(".")
@@ -121,6 +130,7 @@ function! s:GetHeadingLines()
 
             call add(l:headingLines, l:line)
         endif
+        let l:flags = "W"
     endwhile
 
     call winrestview(l:winview)

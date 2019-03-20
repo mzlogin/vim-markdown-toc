@@ -180,6 +180,12 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
     The list item marker, it can be `*`, `-` or `+`.
 
+8. `g:vmt_include_headings_before`
+
+    default: `0`
+
+    Include headings before the position you are inserting Table of Contents.
+
 ## Screenshots
 
 * [online demo in English][5]
