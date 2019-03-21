@@ -40,6 +40,7 @@ endif
 
 if !exists("g:vmt_include_headings_before")
     let g:vmt_include_headings_before = 0
+endif
 
 if !exists("g:vmt_link")
     let g:vmt_link = 1
@@ -488,3 +489,4 @@ command! RemoveToc :call <SID>DeleteExistingToc()
 if g:vmt_auto_update_on_save == 1
     autocmd BufWritePre *.{md,mdown,mkd,mkdn,markdown,mdwn} if !&diff | exe ':silent! UpdateToc' | endif
 endif
+
