@@ -201,7 +201,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 * <https://github.com/ajorgensen/vim-markdown-toc>
 
 [1]: http://mazhuang.org/2015/12/05/diff-between-gfm-and-redcarpet/
-[2]: https://help.github.com/articles/github-flavored-markdown/
+[2]: https://github.github.com/gfm/
 [3]: https://github.com/vmg/redcarpet
 [4]: http://github.com/VundleVim/Vundle.Vim
 [5]: https://github.com/mzlogin/chinese-copywriting-guidelines/blob/Simplified/README.en.md
