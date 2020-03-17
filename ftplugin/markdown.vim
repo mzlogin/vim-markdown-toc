@@ -85,6 +85,7 @@ function! s:GetCodeSections()
     let l:codeSections = {}
 
     call extend(l:codeSections, <SID>GetSections("^```", "^```"))
+    call extend(l:codeSections, <SID>GetSections("^>", "^\\n"))
     call extend(l:codeSections, <SID>GetSections("^{% highlight", "^{% endhighlight"))
 
     return l:codeSections
