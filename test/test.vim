@@ -39,6 +39,7 @@ call ASSERT(GetHeadingLinkTest("### ![vim-markdown-toc-img](/path/to/a/png)", "G
 call ASSERT(GetHeadingLinkTest("### ![](/path/to/a/png)", "GFM") ==# "-2")
 call ASSERT(GetHeadingLinkTest("### 1.1", "GFM") ==# "11")
 call ASSERT(GetHeadingLinkTest("### heading with some \"special\" \(yes, special\) chars: les caractères unicodes", "GFM") ==# "heading-with-some-special-yes-special-chars-les-caractères-unicodes")
+call ASSERT(GetHeadingLinkTest("## 初音ミクV3について", "GFM") ==# "初音ミクv3について")
 " }}}
 
 " GitLab Test Cases {{{
