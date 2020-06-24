@@ -152,10 +152,10 @@ function! s:GetHeadingLinkGFM(headingName)
     " \_$ : end of line
     let l:headingLink = substitute(l:headingLink, "\\_^_\\+\\|_\\+\\_$", "", "g")
     " Characters that are not alphanumeric, latin1 extended (for accents) and
-    " chinese chars are removed.
+    " chinese/korean chars are removed.
     " \\%#=0: allow this pattern to use the regexp engine he wants. Having
     " `set re=1` in the vimrc could break this behavior. cf. issue #19
-    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u00C0-\u00FF\u0400-\u04ff\u4e00-\u9fbf\u3040-\u309F\u30A0-\u30FF _-]", "", "g")
+    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u00C0-\u00FF\u0400-\u04ff\u4e00-\u9fbf\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF _-]", "", "g")
     let l:headingLink = substitute(l:headingLink, " ", "-", "g")
 
     if l:headingLink ==# ""
