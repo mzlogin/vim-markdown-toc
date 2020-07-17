@@ -42,6 +42,10 @@ if !exists("g:vmt_include_headings_before")
     let g:vmt_include_headings_before = 0
 endif
 
+if !exists("g:vmt_insert_anchors")
+    let g:vmt_insert_anchors = 0
+endif
+
 let g:GFMHeadingIds = {}
 
 let s:supportMarkdownStyles = ['GFM', 'Redcarpet', 'GitLab', 'Marked']
@@ -129,7 +133,7 @@ function! s:GetHeadingLines()
             endif
             " ===
 
-            call add(l:headingLines, l:line)
+            call add(l:headingLines, [l:line, l:lineNum])
         endif
         let l:flags = "W"
     endwhile
@@ -255,6 +259,20 @@ function! GetHeadingLinkTest(headingLine, markdownStyle)
     return <SID>GetHeadingLink(l:headingName, a:markdownStyle)
 endfunction
 
+function! s:GenerateAnchor(headingLine, line, markdownStyle, isModeline)
+    let l:anchorText = []
+    if g:vmt_dont_insert_fence == 0
+        call add(l:anchorText, <SID>GetBeginFence(a:markdownStyle, a:isModeline))
+        call add(l:anchorText, "") "Add newline
+    endif
+    call add(l:anchorText, "<a name='". <SID>GetHeadingLink(a:headingLine, a:markdownStyle) ."'></a>")
+    call add(l:anchorText, "") "Add newline
+    if g:vmt_dont_insert_fence == 0
+        call add(l:anchorText, <SID>GetEndFence())
+    endif
+    call append(a:line, l:anchorText)
+endfunction
+
 function! s:GenToc(markdownStyle)
     call <SID>GenTocInner(a:markdownStyle, 0)
 endfunction
@@ -265,12 +283,15 @@ function! s:GenTocInner(markdownStyle, isModeline)
         return
     endif
 
-    let l:headingLines = <SID>GetHeadingLines()
+    let l:fullHeadingLines = <SID>GetHeadingLines()
+    let l:headingLines = deepcopy(l:fullHeadingLines)
+    call map(l:headingLines, {_, val -> val[0]})
     let l:levels = []
     let l:listItemChars = [g:vmt_list_item_char]
+    let l:currentOffset = line('.')
 
     let g:GFMHeadingIds = {}
-    
+
     for headingLine in l:headingLines
         call add(l:levels, <SID>GetHeadingLevel(headingLine))
     endfor
@@ -311,6 +332,16 @@ function! s:GenTocInner(markdownStyle, isModeline)
 
     if g:vmt_dont_insert_fence == 0
         silent put =<SID>GetEndFence()
+    endif
+
+    let l:currentOffset = line('.') - l:currentOffset - 1
+
+    if g:vmt_insert_anchors == 1
+        call reverse(l:fullHeadingLines)
+        for headingLine in l:fullHeadingLines
+            let l:offset = headingLine[1] + l:currentOffset
+            call <SID>GenerateAnchor(headingLine[0], l:offset, a:markdownStyle, a:isModeline)
+        endfor
     endif
 endfunction
 
@@ -406,7 +437,7 @@ function! s:DeleteExistingToc()
     keepjumps normal! gg0
 
     let l:markdownStyle = <SID>GetMarkdownStyleInModeline()
-    
+
     let l:isModeline = 0
 
     if index(s:supportMarkdownStyles, l:markdownStyle) != -1
@@ -453,6 +484,17 @@ function! s:DeleteExistingToc()
         let l:markdownStyle = ""
         echom "Cannot find toc begin fence"
     endif
+
+    "Delete anchors
+    while search(l:tocBeginPattern, "Wc") != 0
+        let l:anchorBeginLineNumber = line(".")
+        if search(l:tocEndPattern, "W") != 0
+            let l:anchorEndLineNumber = line(".")
+            silent execute l:anchorBeginLineNumber. "," . l:anchorEndLineNumber. "delete_"
+        else
+            echom "Cannot find toc end fence"
+        endif
+    endwhile
 
     call winrestview(l:winview)
 
