@@ -42,6 +42,18 @@ if !exists("g:vmt_include_headings_before")
     let g:vmt_include_headings_before = 0
 endif
 
+if !exists("g:vmt_link")
+    let g:vmt_link = 1
+endif
+
+if !exists("g:vmt_min_level")
+    let g:vmt_min_level = 1
+endif
+
+if !exists("g:vmt_max_level")
+    let g:vmt_max_level = 3
+endif
+
 let g:GFMHeadingIds = {}
 
 let s:supportMarkdownStyles = ['GFM', 'Redcarpet', 'GitLab', 'Marked']
@@ -275,7 +287,7 @@ function! s:GenTocInner(markdownStyle, isModeline)
         call add(l:levels, <SID>GetHeadingLevel(headingLine))
     endfor
 
-    let l:minLevel = min(l:levels)
+    let l:minLevel = max([min(l:levels),g:vmt_min_level])
 
     if g:vmt_dont_insert_fence == 0
         silent put =<SID>GetBeginFence(a:markdownStyle, a:isModeline)
@@ -290,19 +302,27 @@ function! s:GenTocInner(markdownStyle, isModeline)
     if !empty(l:headingLines)
         silent put =''
     endif
+
     for headingLine in l:headingLines
         let l:headingName = <SID>GetHeadingName(headingLine)
-        let l:headingIndents = l:levels[i] - l:minLevel
-        let l:listItemChar = l:listItemChars[(l:levels[i] + 1) % len(l:listItemChars)]
-        let l:headingLink = <SID>GetHeadingLink(l:headingName, a:markdownStyle)
-
-        let l:heading = repeat(s:GetIndentText(), l:headingIndents)
-        let l:heading = l:heading . l:listItemChar
-        let l:heading = l:heading . " [" . l:headingName . "]"
-        let l:heading = l:heading . "(#" . l:headingLink . ")"
-
-        silent put =l:heading
-
+	" only add line if less than max level and greater than min level
+	if l:levels[i] <= g:vmt_max_level && l:levels[i] >= g:vmt_min_level
+		let l:headingIndents = l:levels[i] - l:minLevel
+        	let l:listItemChar = l:listItemChars[(l:levels[i] + 1) % len(l:listItemChars)]
+		" make link if desired, otherwise just bullets
+		if g:vmt_link
+        		let l:headingLink = <SID>GetHeadingLink(l:headingName, a:markdownStyle)
+	        	let l:heading = repeat(s:GetIndentText(), l:headingIndents)
+       		 	let l:heading = l:heading . l:listItemChar
+        		let l:heading = l:heading . " [" . l:headingName . "]"
+        		let l:heading = l:heading . "(#" . l:headingLink . ")"
+		else
+	        	let l:heading = repeat(s:GetIndentText(), l:headingIndents)
+			let l:heading = l:heading . l:listItemChar
+        		let l:heading = l:heading . " " . l:headingName
+		endif
+        	silent put =l:heading
+	endif
         let l:i += 1
     endfor
 
@@ -470,3 +490,4 @@ command! RemoveToc :call <SID>DeleteExistingToc()
 if g:vmt_auto_update_on_save == 1
     autocmd BufWritePre *.{md,mdown,mkd,mkdn,markdown,mdwn} if !&diff | exe ':silent! UpdateToc' | endif
 endif
+
