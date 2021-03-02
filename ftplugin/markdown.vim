@@ -51,7 +51,7 @@ if !exists("g:vmt_min_level")
 endif
 
 if !exists("g:vmt_max_level")
-    let g:vmt_max_level = 3
+    let g:vmt_max_level = 6
 endif
 
 let g:GFMHeadingIds = {}
@@ -305,24 +305,24 @@ function! s:GenTocInner(markdownStyle, isModeline)
 
     for headingLine in l:headingLines
         let l:headingName = <SID>GetHeadingName(headingLine)
-	" only add line if less than max level and greater than min level
-	if l:levels[i] <= g:vmt_max_level && l:levels[i] >= g:vmt_min_level
-		let l:headingIndents = l:levels[i] - l:minLevel
-        	let l:listItemChar = l:listItemChars[(l:levels[i] + 1) % len(l:listItemChars)]
-		" make link if desired, otherwise just bullets
-		if g:vmt_link
-        		let l:headingLink = <SID>GetHeadingLink(l:headingName, a:markdownStyle)
-	        	let l:heading = repeat(s:GetIndentText(), l:headingIndents)
-       		 	let l:heading = l:heading . l:listItemChar
-        		let l:heading = l:heading . " [" . l:headingName . "]"
-        		let l:heading = l:heading . "(#" . l:headingLink . ")"
-		else
-	        	let l:heading = repeat(s:GetIndentText(), l:headingIndents)
-			let l:heading = l:heading . l:listItemChar
-        		let l:heading = l:heading . " " . l:headingName
-		endif
-        	silent put =l:heading
-	endif
+        " only add line if less than max level and greater than min level
+        if l:levels[i] <= g:vmt_max_level && l:levels[i] >= g:vmt_min_level
+            let l:headingIndents = l:levels[i] - l:minLevel
+            let l:listItemChar = l:listItemChars[(l:levels[i] + 1) % len(l:listItemChars)]
+            " make link if desired, otherwise just bullets
+            if g:vmt_link
+                let l:headingLink = <SID>GetHeadingLink(l:headingName, a:markdownStyle)
+                let l:heading = repeat(s:GetIndentText(), l:headingIndents)
+                let l:heading = l:heading . l:listItemChar
+                let l:heading = l:heading . " [" . l:headingName . "]"
+                let l:heading = l:heading . "(#" . l:headingLink . ")"
+            else
+                let l:heading = repeat(s:GetIndentText(), l:headingIndents)
+                let l:heading = l:heading . l:listItemChar
+                let l:heading = l:heading . " " . l:headingName
+            endif
+            silent put =l:heading
+        endif
         let l:i += 1
     endfor
 
