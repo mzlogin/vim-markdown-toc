@@ -10,6 +10,8 @@ A vim 7.4+ plugin to generate table of contents for Markdown files.
 
 * [Features](#features)
 * [Installation](#installation)
+    * [vim-plug](#vim-plug)
+    * [Vundle](#vundle)
 * [Usage](#usage)
     * [Generate table of contents](#generate-table-of-contents)
     * [Update existing table of contents](#update-existing-table-of-contents)
@@ -36,7 +38,21 @@ A vim 7.4+ plugin to generate table of contents for Markdown files.
 
 ## Installation
 
-Suggest to manage your vim plugins via [Vundle][4] so you can install it simply three steps:
+Suggest to manage your vim plugins via [vim-plug][8] or [Vundle][4], so you can install it simply three steps:
+
+### vim-plug
+
+1. add the following line to your vimrc file
+
+    ```
+    Plug 'mzlogin/vim-markdown-toc'
+    ```
+
+2. `:so $MYVIMRC`
+
+3. `:PlugInstall`
+
+### Vundle
 
 1. add the following line to your vimrc file
 
@@ -47,8 +63,6 @@ Suggest to manage your vim plugins via [Vundle][4] so you can install it simply 
 2. `:so $MYVIMRC`
 
 3. `:PluginInstall`
-
-Installation with [vim-plug][8] is likeness.
 
 ## Usage
 
