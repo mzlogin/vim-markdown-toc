@@ -192,8 +192,8 @@ endfunction
 " suppport for GitLab, fork of GetHeadingLinkGFM
 " it's dirty to copy & paste code but more clear for maintain
 function! s:GetHeadingLinkGitLab(headingName)
-    let l:headingLink = tr(a:headingName, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")
-
+    let l:headingLink = tolower(a:headingName)
+  
     let l:headingLink = substitute(l:headingLink, "\\_^_\\+\\|_\\+\\_$", "", "g")
     let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u00C0-\u00FF\u0400-\u04ff\u4e00-\u9fbf _-]", "", "g")
     let l:headingLink = substitute(l:headingLink, " ", "-", "g")

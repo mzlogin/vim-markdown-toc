@@ -67,7 +67,8 @@ call ASSERT(GetHeadingLinkTest("### ![vim-markdown-toc-img](/path/to/a/png)", "G
 call ASSERT(GetHeadingLinkTest("### ![](/path/to/a/png)", "GitLab") ==# "-2")
 call ASSERT(GetHeadingLinkTest("### 1.1", "GitLab") ==# "11")
 call ASSERT(GetHeadingLinkTest("### heading with some \"special\" \(yes, special\) chars: les caractères unicodes", "GitLab") ==# "heading-with-some-special-yes-special-chars-les-caractères-unicodes")
-call ASSERT(GetHeadingLinkTest("## heading with Cyrillic Б б", "GitLab") ==# "heading-with-cyrillic-Б-б")
+call ASSERT(GetHeadingLinkTest("## heading with Cyrillic Б б", "GitLab") ==# "heading-with-cyrillic-б-б")
+call ASSERT(GetHeadingLinkTest("## Ю heading starts with Cyrillic", "GitLab") ==# "ю-heading-starts-with-cyrillic")
 " }}}
 
 " Redcarpet Test Cases {{{
