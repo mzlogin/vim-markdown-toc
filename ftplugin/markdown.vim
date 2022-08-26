@@ -316,6 +316,9 @@ function! s:GenTocInner(markdownStyle, isModeline)
                 let l:heading = l:heading . l:listItemChar
                 let l:heading = l:heading . " [" . l:headingName . "]"
                 let l:heading = l:heading . "(#" . l:headingLink . ")"
+                if a:markdownStyle == "Redcarpet"
+                        let l:heading = l:heading . "  "
+                endif
             else
                 let l:heading = repeat(s:GetIndentText(), l:headingIndents)
                 let l:heading = l:heading . l:listItemChar
@@ -339,7 +342,7 @@ function! s:GetIndentText()
         return g:vmt_list_indent_text
     endif
     if &expandtab
-        return repeat(" ", &shiftwidth)
+        return repeat(" ", 2)
     else
         return "\t"
     endif
