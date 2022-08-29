@@ -339,7 +339,13 @@ function! s:GetIndentText()
         return g:vmt_list_indent_text
     endif
     if &expandtab
-        return repeat(" ", &shiftwidth)
+        if &shiftwidth > 5
+            return repeat(" ", 5)
+        elseif &shiftwidth < 2
+            return repeat(" ", 2)
+        else
+            return repeat(" ", &shiftwidth)
+        endif
     else
         return "\t"
     endif
