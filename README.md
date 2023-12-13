@@ -108,7 +108,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
 1. `g:vmt_auto_update_on_save`
 
-   default: 1
+   default: `1`
 
    This plugin will update existing table of contents on save automatic.
 
@@ -120,7 +120,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
 2. `g:vmt_dont_insert_fence`
 
-   default: 0
+   default: `0`
 
    By default, the `:GenTocXXX` commands will add `<!-- vim-markdown-toc -->` fence to the table of contents, it is designed for feature of auto update table of contents on save and `:UpdateToc` command, it won't effect what your Markdown file looks like after parse.
 
@@ -158,7 +158,7 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
 6. `g:vmt_cycle_list_item_markers`
 
-   default: 0
+   default: `0`
 
    By default, `*` is used to denote every level of a list:
 
@@ -199,6 +199,30 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
     default: `0`
 
     Include headings before the position you are inserting Table of Contents.
+
+9. `g:vmt_list_indent_text`
+
+    default: `''`
+
+    The indent text of list item. By default, if `expandtab` is set, it will be `shiftwidth`([2, 5]) number of space, otherwise it will be `\t`. If you set this option, it will override the default behavior.
+
+10. `g:vmt_link`
+
+    default: `1`
+
+    Whether to generate link for headings.
+
+11. `g:vmt_min_level`
+
+    default: `1`
+
+    The minimum level of headings to be included in the table of contents.
+
+12. `g:vmt_max_level`
+
+    default: `6`
+
+    The maximum level of headings to be included in the table of contents.
 
 ## Screenshots
 
