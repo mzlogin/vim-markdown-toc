@@ -36,6 +36,8 @@ A vim 7.4+ plugin to generate table of contents for Markdown files.
 
 * Auto update existing table of contents on save.
 
+*Note: This plugin only works in Markdown files, that usually have a .[md|mdown|mkd|mkdn|markdown|mdwn|mdx] suffix. To check file type, please run `:set ft`, Markdown files will echo `filetype=markdown`.*
+
 ## Installation
 
 Suggest to manage your vim plugins via [vim-plug][8] or [Vundle][4], so you can install it simply three steps:
