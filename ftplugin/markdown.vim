@@ -174,14 +174,26 @@ function! s:GetHeadingLinkGFM(headingName)
     if l:headingLink ==# ""
         let l:nullKey = "<null>"
         if has_key(g:GFMHeadingIds, l:nullKey)
-            let g:GFMHeadingIds[l:nullKey] += 1
-            let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:nullKey]
+            let l:currentNum = 1
+            let l:newKey = l:headingLink . "-" . l:currentNum
+            while has_key(g:GFMHeadingIds, l:newKey)
+                let l:currentNum += 1
+                let l:newKey = l:headingLink . "-" . l:currentNum
+            endwhile
+            let l:headingLink = l:newKey
+            let g:GFMHeadingIds[l:headingLink] = 0
         else
             let g:GFMHeadingIds[l:nullKey] = 0
         endif
     elseif has_key(g:GFMHeadingIds, l:headingLink)
-        let g:GFMHeadingIds[l:headingLink] += 1
-        let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:headingLink]
+        let l:currentNum = 1
+        let l:newKey = l:headingLink . "-" . l:currentNum
+        while has_key(g:GFMHeadingIds, l:newKey)
+            let l:currentNum += 1
+            let l:newKey = l:headingLink . "-" . l:currentNum
+        endwhile
+        let l:headingLink = l:newKey
+        let g:GFMHeadingIds[l:headingLink] = 0
     else
         let g:GFMHeadingIds[l:headingLink] = 0
     endif
@@ -240,12 +252,24 @@ function! s:GetHeadingLinkMarked(headingName)
     return l:headingLink
 endfunction
 
-function! s:GetHeadingName(headingLine)
+function! s:GetHeadingName(headingLine, markdownStyle)
+    if a:markdownStyle ==# s:supportMarkdownStyles[s:MARKED_STYLE_INDEX]
+        return <SID>GetHeadingNameMarked(a:headingLine)
+    endif
+
     let l:headingName = substitute(a:headingLine, '^#*\s*', "", "")
     let l:headingName = substitute(l:headingName, '\s*#*$', "", "")
 
     let l:headingName = substitute(l:headingName, '\[\([^\[\]]*\)\]([^()]*)', '\1', "g")
     let l:headingName = substitute(l:headingName, '\[\([^\[\]]*\)\]\[[^\[\]]*\]', '\1', "g")
+
+    return l:headingName
+endfunction
+
+function! s:GetHeadingNameMarked(headingLine)
+    let l:headingName = substitute(a:headingLine, '^#*\s*', "", "")
+    let l:headingName = substitute(l:headingName, '\s\+$', "", "g")
+    let l:headingName = substitute(l:headingName, '\s*#*$', "", "")
 
     return l:headingName
 endfunction
@@ -263,7 +287,7 @@ function! s:GetHeadingLink(headingName, markdownStyle)
 endfunction
 
 function! GetHeadingLinkTest(headingLine, markdownStyle)
-    let l:headingName = <SID>GetHeadingName(a:headingLine)
+    let l:headingName = <SID>GetHeadingName(a:headingLine, a:markdownStyle)
     return <SID>GetHeadingLink(l:headingName, a:markdownStyle)
 endfunction
 
@@ -304,7 +328,7 @@ function! s:GenTocInner(markdownStyle, isModeline)
     endif
 
     for headingLine in l:headingLines
-        let l:headingName = <SID>GetHeadingName(headingLine)
+        let l:headingName = <SID>GetHeadingName(headingLine, a:markdownStyle)
         " only add line if less than max level and greater than min level
         if l:levels[i] <= g:vmt_max_level && l:levels[i] >= g:vmt_min_level
             let l:headingIndents = l:levels[i] - l:minLevel
