@@ -27,21 +27,23 @@
     * [Same Name `but` One `Has Code`](#same-name-but-one-has-code-1)
     * [Ending Number Trickery](#ending-number-trickery)
     * [Ending Number Trickery](#ending-number-trickery-1)
-    * [Ending Number Trickery 1](#ending-number-trickery-1)
+    * [Ending Number Trickery 1](#ending-number-trickery-1-1)
     * [Ending Number Trickery](#ending-number-trickery-2)
-    * [Ending Number Trickery 2](#ending-number-trickery-2)
+    * [Ending Number Trickery 2](#ending-number-trickery-2-1)
     * [Other Ending Number Trickery 1](#other-ending-number-trickery-1)
     * [Other Ending Number Trickery](#other-ending-number-trickery)
-    * [Other Ending Number Trickery](#other-ending-number-trickery-1)
+    * [Other Ending Number Trickery](#other-ending-number-trickery-2)
     * [Final Ending Number Trickery](#final-ending-number-trickery)
     * [Final Ending Number Trickery](#final-ending-number-trickery-1)
-    * [Final Ending Number Trickery 1](#final-ending-number-trickery-1)
-    * [Final Ending Number Trickery 1 1](#final-ending-number-trickery-1-1)
+    * [Final Ending Number Trickery 1](#final-ending-number-trickery-1-1)
     * [Final Ending Number Trickery 1 1](#final-ending-number-trickery-1-1-1)
+    * [Final Ending Number Trickery 1 1](#final-ending-number-trickery-1-1-2)
     * [Underscored_heading](#underscored_heading)
     * [Multiple__underscores](#multiple__underscores)
     * [\_Leading_underscore](#_leading_underscore)
+    * [_Leading_underscore_without_escape](#leading_underscore_without_escape)
     * [Trailing_underscore\_](#trailing_underscore)
+    * [Trailing_underscore_without_escape_](#trailing_underscore_without_escape)
     * [Heading with non-`[a-z]` letters like ß, ا, and 猫](#heading-with-non-a-z-letters-like-ß--and-猫)
     * [Heading with a Chinese punctuation mark (specifically '】')](#heading-with-a-chinese-punctuation-mark-specifically-)
     * [M̵i̶l̶d̵l̶y̵ ̴Z̸a̴l̶g̶o̵](#M̵i̶l̶d̵l̶y̵ ̴Z̸a̴l̶g̶o̵)
@@ -143,7 +145,11 @@ not heading2
 
 ## \_Leading_underscore
 
+## _Leading_underscore_without_escape
+
 ## Trailing_underscore\_
+
+## Trailing_underscore_without_escape_
 
 ## Heading with non-`[a-z]` letters like ß, ا, and 猫
 
