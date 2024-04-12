@@ -14,6 +14,7 @@
     * [Section 3.1 Can I use /? || \?](#section-3.1-can-i-use-/?-||-\?)
     * [Section 3.2 Test @ and -](#section-3.2-test-@-and--)
     * [Section 3.3 Done. Cheer Up~](#section-3.3-done.-cheer-up~)
+    * [heading with some "special" (yes, special) chars: les caractères unicodes](#heading-with-some-"special"-(yes,-special)-chars:-les-caractères-unicodes)
 
 <!-- vim-markdown-toc -->
 
@@ -171,3 +172,4 @@ That's all thx.
 
 YES! YOU CAN DO ALL OF ThOSE THINGS!
 
+### heading with some "special" (yes, special) chars: les caractères unicodes

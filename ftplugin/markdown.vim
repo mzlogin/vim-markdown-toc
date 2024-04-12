@@ -155,33 +155,38 @@ function! s:GetHeadingLevel(headingLine)
     return match(a:headingLine, '[^#]')
 endfunction
 
+function! s:AppendNumberTrickery(headingLink)
+    let l:currentNum = 1
+    let l:newKey = a:headingLink . "-" . l:currentNum
+    while has_key(g:GFMHeadingIds, l:newKey)
+        let l:currentNum += 1
+        let l:newKey = a:headingLink . "-" . l:currentNum
+    endwhile
+    return l:newKey
+endfunction
+
 function! s:GetHeadingLinkGFM(headingName)
     let l:headingLink = tr(a:headingName, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")
 
-    " \_^ : start of line
-    " _\+ : one of more underscore _
-    " \| : OR
-    " _\+ : one of more underscore _
-    " \_$ : end of line
-    let l:headingLink = substitute(l:headingLink, "\\_^_\\+\\|_\\+\\_$", "", "g")
     " Characters that are not alphanumeric, latin1 extended (for accents) and
-    " chinese/korean chars are removed.
+    " Chinese/Japanese/Korean/Arabic chars are removed.
+    " unicode scope can ref https://fuhaoku.net/blocks
     " \\%#=0: allow this pattern to use the regexp engine he wants. Having
     " `set re=1` in the vimrc could break this behavior. cf. issue #19
-    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u00C0-\u00FF\u0400-\u04ff\u4e00-\u9fbf\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF _-]", "", "g")
+    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u00C0-\u00FF\u0400-\u04ff\u0600-\u06ff\u4e00-\u9fbf\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF _-]", "", "g")
     let l:headingLink = substitute(l:headingLink, " ", "-", "g")
 
     if l:headingLink ==# ""
         let l:nullKey = "<null>"
         if has_key(g:GFMHeadingIds, l:nullKey)
-            let g:GFMHeadingIds[l:nullKey] += 1
-            let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:nullKey]
+            let l:headingLink = <SID>AppendNumberTrickery(l:headingLink)
+            let g:GFMHeadingIds[l:headingLink] = 0
         else
             let g:GFMHeadingIds[l:nullKey] = 0
         endif
     elseif has_key(g:GFMHeadingIds, l:headingLink)
-        let g:GFMHeadingIds[l:headingLink] += 1
-        let l:headingLink = l:headingLink . "-" . g:GFMHeadingIds[l:headingLink]
+        let l:headingLink = <SID>AppendNumberTrickery(l:headingLink)
+        let g:GFMHeadingIds[l:headingLink] = 0
     else
         let g:GFMHeadingIds[l:headingLink] = 0
     endif
@@ -240,12 +245,24 @@ function! s:GetHeadingLinkMarked(headingName)
     return l:headingLink
 endfunction
 
-function! s:GetHeadingName(headingLine)
+function! s:GetHeadingName(headingLine, markdownStyle)
+    if a:markdownStyle ==# s:supportMarkdownStyles[s:MARKED_STYLE_INDEX]
+        return <SID>GetHeadingNameMarked(a:headingLine)
+    endif
+
     let l:headingName = substitute(a:headingLine, '^#*\s*', "", "")
     let l:headingName = substitute(l:headingName, '\s*#*$', "", "")
 
     let l:headingName = substitute(l:headingName, '\[\([^\[\]]*\)\]([^()]*)', '\1', "g")
     let l:headingName = substitute(l:headingName, '\[\([^\[\]]*\)\]\[[^\[\]]*\]', '\1', "g")
+
+    return l:headingName
+endfunction
+
+function! s:GetHeadingNameMarked(headingLine)
+    let l:headingName = substitute(a:headingLine, '^#*\s*', "", "")
+    let l:headingName = substitute(l:headingName, '\s\+$', "", "g")
+    let l:headingName = substitute(l:headingName, '\s*#*$', "", "")
 
     return l:headingName
 endfunction
@@ -263,7 +280,7 @@ function! s:GetHeadingLink(headingName, markdownStyle)
 endfunction
 
 function! GetHeadingLinkTest(headingLine, markdownStyle)
-    let l:headingName = <SID>GetHeadingName(a:headingLine)
+    let l:headingName = <SID>GetHeadingName(a:headingLine, a:markdownStyle)
     return <SID>GetHeadingLink(l:headingName, a:markdownStyle)
 endfunction
 
@@ -304,7 +321,7 @@ function! s:GenTocInner(markdownStyle, isModeline)
     endif
 
     for headingLine in l:headingLines
-        let l:headingName = <SID>GetHeadingName(headingLine)
+        let l:headingName = <SID>GetHeadingName(headingLine, a:markdownStyle)
         " only add line if less than max level and greater than min level
         if l:levels[i] <= g:vmt_max_level && l:levels[i] >= g:vmt_min_level
             let l:headingIndents = l:levels[i] - l:minLevel
