@@ -30,6 +30,10 @@
     * [Ending Number Trickery 1](#ending-number-trickery-1-1)
     * [Ending Number Trickery](#ending-number-trickery-2)
     * [Ending Number Trickery 2](#ending-number-trickery-2-1)
+    * [Reverse Order Number Trickery 5](#reverse-order-number-trickery-5)
+    * [Reverse Order Number Trickery](#reverse-order-number-trickery)
+    * [Reverse Order Number Trickery 5](#reverse-order-number-trickery-5-1)
+    * [Reverse Order Number Trickery](#reverse-order-number-trickery-1)
     * [Other Ending Number Trickery 1](#other-ending-number-trickery-1)
     * [Other Ending Number Trickery](#other-ending-number-trickery)
     * [Other Ending Number Trickery](#other-ending-number-trickery-2)
@@ -44,7 +48,7 @@
     * [_Leading_underscore_without_escape](#_leading_underscore_without_escape)
     * [Trailing_underscore\_](#trailing_underscore_)
     * [Trailing_underscore_without_escape_](#trailing_underscore_without_escape_)
-    * [Heading with non-`[a-z]` letters like ß, ا, and 猫](#heading-with-non-a-z-letters-like-ß--and-猫)
+    * [Heading with non-`[a-z]` letters like ß, ا, and 猫](#heading-with-non-a-z-letters-like-ß-ا-and-猫)
     * [Heading with a Chinese punctuation mark (specifically '】')](#heading-with-a-chinese-punctuation-mark-specifically-)
     * [M̵i̶l̶d̵l̶y̵ ̴Z̸a̴l̶g̶o̵](#M̵i̶l̶d̵l̶y̵ ̴Z̸a̴l̶g̶o̵)
     * [Greek letter Mu (Μ)](#greek-letter-mu-)
@@ -122,6 +126,14 @@ not heading2
 ## Ending Number Trickery
 
 ## Ending Number Trickery 2
+
+## Reverse Order Number Trickery 5
+
+## Reverse Order Number Trickery
+
+## Reverse Order Number Trickery 5
+
+## Reverse Order Number Trickery
 
 ## Other Ending Number Trickery 1
 
