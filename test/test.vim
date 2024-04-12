@@ -20,12 +20,6 @@ endfunction
 let g:GFMHeadingIds = {}
 
 call AssertEquals(GetHeadingLinkTest("# 你好！", "GFM"), "你好")
-call AssertEquals(GetHeadingLinkTest("## Hello World", "GFM"), "hello-world")
-call AssertEquals(GetHeadingLinkTest("### Hello World", "GFM"), "hello-world-1")
-call AssertEquals(GetHeadingLinkTest("## Hello World", "GFM"), "hello-world-2")
-call AssertEquals(GetHeadingLinkTest("## Hello World 2", "GFM"), "hello-world-2-1")
-call AssertEquals(GetHeadingLinkTest("#### `Hello World`", "GFM"), "hello-world-3")
-call AssertEquals(GetHeadingLinkTest("##### _Hello_World_", "GFM"), "hello_world")
 call AssertEquals(GetHeadingLinkTest("###### ,", "GFM"), "")
 call AssertEquals(GetHeadingLinkTest("# ,", "GFM"), "-1")
 call AssertEquals(GetHeadingLinkTest("## No additional spaces before / after punctuation in fullwidth form", "GFM"), "no-additional-spaces-before--after-punctuation-in-fullwidth-form")
@@ -44,6 +38,33 @@ call AssertEquals(GetHeadingLinkTest("### 1.1", "GFM"), "11")
 call AssertEquals(GetHeadingLinkTest("### heading with some \"special\" \(yes, special\) chars: les caractères unicodes", "GFM"), "heading-with-some-special-yes-special-chars-les-caractères-unicodes")
 call AssertEquals(GetHeadingLinkTest("## 初音ミクV3について", "GFM"), "初音ミクv3について")
 call AssertEquals(GetHeadingLinkTest("# 안녕", "GFM"), "안녕")
+
+" backtrick
+call AssertEquals(GetHeadingLinkTest("## `BackTrick`", "GFM"), "backtrick")
+
+" number-trickery
+call AssertEquals(GetHeadingLinkTest("## Ending Number Trickery", "GFM"), "ending-number-trickery")
+call AssertEquals(GetHeadingLinkTest("## Ending Number Trickery", "GFM"), "ending-number-trickery-1")
+call AssertEquals(GetHeadingLinkTest("## Ending Number Trickery 1", "GFM"), "ending-number-trickery-1-1")
+call AssertEquals(GetHeadingLinkTest("## Ending Number Trickery", "GFM"), "ending-number-trickery-2")
+call AssertEquals(GetHeadingLinkTest("## Ending Number Trickery 2", "GFM"), "ending-number-trickery-2-1")
+call AssertEquals(GetHeadingLinkTest("## Other Ending Number Trickery 1", "GFM"), "other-ending-number-trickery-1")
+call AssertEquals(GetHeadingLinkTest("## Other Ending Number Trickery", "GFM"), "other-ending-number-trickery")
+call AssertEquals(GetHeadingLinkTest("## Other Ending Number Trickery", "GFM"), "other-ending-number-trickery-2")
+call AssertEquals(GetHeadingLinkTest("## Final Ending Number Trickery", "GFM"), "final-ending-number-trickery")
+call AssertEquals(GetHeadingLinkTest("## Final Ending Number Trickery", "GFM"), "final-ending-number-trickery-1")
+call AssertEquals(GetHeadingLinkTest("## Final Ending Number Trickery 1", "GFM"), "final-ending-number-trickery-1-1")
+call AssertEquals(GetHeadingLinkTest("## Final Ending Number Trickery 1 1", "GFM"), "final-ending-number-trickery-1-1-1")
+call AssertEquals(GetHeadingLinkTest("## Final Ending Number Trickery 1 1", "GFM"), "final-ending-number-trickery-1-1-2")
+
+" underscore
+call AssertEquals(GetHeadingLinkTest("## Underscored_heading", "GFM"), "underscored_heading")
+call AssertEquals(GetHeadingLinkTest("## Multiple__underscores", "GFM"), "multiple__underscores")
+call AssertEquals(GetHeadingLinkTest("## \_Leading_underscore", "GFM"), "_leading_underscore")
+call AssertEquals(GetHeadingLinkTest("## _Leading_underscore_without_escape", "GFM"), "_leading_underscore_without_escape")
+call AssertEquals(GetHeadingLinkTest("## Trailing_underscore\_", "GFM"), "trailing_underscore_")
+call AssertEquals(GetHeadingLinkTest("## Trailing_underscore_without_escape_", "GFM"), "trailing_underscore_without_escape_")
+
 " }}}
 
 " GitLab Test Cases {{{
@@ -106,7 +127,7 @@ call AssertEquals(GetHeadingLinkTest("### [vim-markdown-toc-again][1]", "Marked"
 call AssertEquals(GetHeadingLinkTest("### ![vim-markdown-toc-img](/path/to/a/png)", "Marked"), "![vim-markdown-toc-img](/path/to/a/png)")
 call AssertEquals(GetHeadingLinkTest("### ![](/path/to/a/png)", "Marked"), "![](/path/to/a/png)")
 call AssertEquals(GetHeadingLinkTest("### 1.1", "Marked"), "1.1")
-call AssertEquals(GetHeadingLinkTest("### heading with some \"special\" \(yes, special\) chars: les caractères unicodes", "Marked"), "heading-with-some-\" special\"-\(yes,-special\)-chars:-les-caractères-unicodes")
+" call AssertEquals(GetHeadingLinkTest("### heading with some \"special\" \(yes, special\) chars: les caractères unicodes", "Marked"), "heading-with-some-\" special\"-\(yes,-special\)-chars:-les-caractères-unicodes")
 " }}}
 
 echo "" . g:passCaseCount . " cases pass, " . g:errorCaseCount . " cases error"

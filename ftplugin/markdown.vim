@@ -163,7 +163,7 @@ function! s:GetHeadingLinkGFM(headingName)
     " \| : OR
     " _\+ : one of more underscore _
     " \_$ : end of line
-    let l:headingLink = substitute(l:headingLink, "\\_^_\\+\\|_\\+\\_$", "", "g")
+    " let l:headingLink = substitute(l:headingLink, "\\_^_\\+\\|_\\+\\_$", "", "g")
     " Characters that are not alphanumeric, latin1 extended (for accents) and
     " chinese/korean chars are removed.
     " \\%#=0: allow this pattern to use the regexp engine he wants. Having
