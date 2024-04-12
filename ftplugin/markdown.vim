@@ -155,44 +155,37 @@ function! s:GetHeadingLevel(headingLine)
     return match(a:headingLine, '[^#]')
 endfunction
 
+function! s:AppendNumberTrickery(headingLink)
+    let l:currentNum = 1
+    let l:newKey = a:headingLink . "-" . l:currentNum
+    while has_key(g:GFMHeadingIds, l:newKey)
+        let l:currentNum += 1
+        let l:newKey = a:headingLink . "-" . l:currentNum
+    endwhile
+    return l:newKey
+endfunction
+
 function! s:GetHeadingLinkGFM(headingName)
     let l:headingLink = tr(a:headingName, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")
 
-    " \_^ : start of line
-    " _\+ : one of more underscore _
-    " \| : OR
-    " _\+ : one of more underscore _
-    " \_$ : end of line
-    " let l:headingLink = substitute(l:headingLink, "\\_^_\\+\\|_\\+\\_$", "", "g")
     " Characters that are not alphanumeric, latin1 extended (for accents) and
-    " chinese/korean chars are removed.
+    " Chinese/Japanese/Korean/Arabic chars are removed.
+    " unicode scope can ref https://fuhaoku.net/blocks
     " \\%#=0: allow this pattern to use the regexp engine he wants. Having
     " `set re=1` in the vimrc could break this behavior. cf. issue #19
-    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u00C0-\u00FF\u0400-\u04ff\u4e00-\u9fbf\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF _-]", "", "g")
+    let l:headingLink = substitute(l:headingLink, "\\%#=0[^[:alnum:]\u00C0-\u00FF\u0400-\u04ff\u0600-\u06ff\u4e00-\u9fbf\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF _-]", "", "g")
     let l:headingLink = substitute(l:headingLink, " ", "-", "g")
 
     if l:headingLink ==# ""
         let l:nullKey = "<null>"
         if has_key(g:GFMHeadingIds, l:nullKey)
-            let l:currentNum = 1
-            let l:newKey = l:headingLink . "-" . l:currentNum
-            while has_key(g:GFMHeadingIds, l:newKey)
-                let l:currentNum += 1
-                let l:newKey = l:headingLink . "-" . l:currentNum
-            endwhile
-            let l:headingLink = l:newKey
+            let l:headingLink = <SID>AppendNumberTrickery(l:headingLink)
             let g:GFMHeadingIds[l:headingLink] = 0
         else
             let g:GFMHeadingIds[l:nullKey] = 0
         endif
     elseif has_key(g:GFMHeadingIds, l:headingLink)
-        let l:currentNum = 1
-        let l:newKey = l:headingLink . "-" . l:currentNum
-        while has_key(g:GFMHeadingIds, l:newKey)
-            let l:currentNum += 1
-            let l:newKey = l:headingLink . "-" . l:currentNum
-        endwhile
-        let l:headingLink = l:newKey
+        let l:headingLink = <SID>AppendNumberTrickery(l:headingLink)
         let g:GFMHeadingIds[l:headingLink] = 0
     else
         let g:GFMHeadingIds[l:headingLink] = 0

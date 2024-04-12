@@ -1,3 +1,7 @@
+if exists("g:loaded_MarkdownTocPlugin")
+    unlet g:loaded_MarkdownTocPlugin
+endif
+
 exec "silent! source " . "../ftplugin/markdown.vim"
 
 let g:caseCount = 0
@@ -35,9 +39,12 @@ call AssertEquals(GetHeadingLinkTest("### [vim-markdown-toc-again][1]", "GFM"), 
 call AssertEquals(GetHeadingLinkTest("### ![vim-markdown-toc-img](/path/to/a/png)", "GFM"), "vim-markdown-toc-img")
 call AssertEquals(GetHeadingLinkTest("### ![](/path/to/a/png)", "GFM"), "-2")
 call AssertEquals(GetHeadingLinkTest("### 1.1", "GFM"), "11")
+
+" languages
 call AssertEquals(GetHeadingLinkTest("### heading with some \"special\" \(yes, special\) chars: les caractères unicodes", "GFM"), "heading-with-some-special-yes-special-chars-les-caractères-unicodes")
 call AssertEquals(GetHeadingLinkTest("## 初音ミクV3について", "GFM"), "初音ミクv3について")
 call AssertEquals(GetHeadingLinkTest("# 안녕", "GFM"), "안녕")
+call AssertEquals(GetHeadingLinkTest("## Heading with non-`[a-z]` letters like ß, ا, and 猫", "GFM"), "heading-with-non-a-z-letters-like-ß-ا-and-猫")
 
 " backtrick
 call AssertEquals(GetHeadingLinkTest("## `BackTrick`", "GFM"), "backtrick")
