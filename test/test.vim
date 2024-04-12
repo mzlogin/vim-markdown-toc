@@ -50,6 +50,10 @@ call AssertEquals(GetHeadingLinkTest("## Heading with non-`[a-z]` letters like Ã
 call AssertEquals(GetHeadingLinkTest("## `BackTrick`", "GFM"), "backtrick")
 
 " number-trickery
+call AssertEquals(GetHeadingLinkTest("## Reverse Order Number Trickery 5", "GFM"), "reverse-order-number-trickery-5")
+call AssertEquals(GetHeadingLinkTest("## Reverse Order Number Trickery", "GFM"), "reverse-order-number-trickery")
+call AssertEquals(GetHeadingLinkTest("## Reverse Order Number Trickery 5", "GFM"), "reverse-order-number-trickery-5-1")
+call AssertEquals(GetHeadingLinkTest("## Reverse Order Number Trickery", "GFM"), "reverse-order-number-trickery-1")
 call AssertEquals(GetHeadingLinkTest("## Ending Number Trickery", "GFM"), "ending-number-trickery")
 call AssertEquals(GetHeadingLinkTest("## Ending Number Trickery", "GFM"), "ending-number-trickery-1")
 call AssertEquals(GetHeadingLinkTest("## Ending Number Trickery 1", "GFM"), "ending-number-trickery-1-1")
