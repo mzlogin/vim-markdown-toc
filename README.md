@@ -226,6 +226,12 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
     The maximum level of headings to be included in the table of contents.
 
+13. `g:vmt_list_flag_min_width`
+
+    no default value
+
+    The minimum width of the list flag, fill with spaces if necessary.
+
 ## Screenshots
 
 * [online demo in English][5]

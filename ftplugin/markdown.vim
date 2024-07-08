@@ -315,7 +315,7 @@ function! s:GenTocInner(markdownStyle, isModeline)
     endif
 
     let l:i = 0
-    " a black line before toc
+    " a blank line before toc
     if !empty(l:headingLines)
         silent put =''
     endif
@@ -326,17 +326,27 @@ function! s:GenTocInner(markdownStyle, isModeline)
         if l:levels[i] <= g:vmt_max_level && l:levels[i] >= g:vmt_min_level
             let l:headingIndents = l:levels[i] - l:minLevel
             let l:listItemChar = l:listItemChars[(l:levels[i] + 1) % len(l:listItemChars)]
+
+            let l:spacesAfterItemChar = ' '
+            if exists("g:vmt_list_flag_min_width") && typename(g:vmt_list_flag_min_width) == 'number'
+                if len(l:listItemChar) < g:vmt_list_flag_min_width
+                    let l:spacesAfterItemChar = repeat(' ', g:vmt_list_flag_min_width - len(l:listItemChar))
+                endif
+            endif
+
             " make link if desired, otherwise just bullets
             if g:vmt_link
                 let l:headingLink = <SID>GetHeadingLink(l:headingName, a:markdownStyle)
                 let l:heading = repeat(s:GetIndentText(), l:headingIndents)
                 let l:heading = l:heading . l:listItemChar
-                let l:heading = l:heading . " [" . l:headingName . "]"
+                let l:heading = l:heading . l:spacesAfterItemChar
+                let l:heading = l:heading . "[" . l:headingName . "]"
                 let l:heading = l:heading . "(#" . l:headingLink . ")"
             else
                 let l:heading = repeat(s:GetIndentText(), l:headingIndents)
                 let l:heading = l:heading . l:listItemChar
-                let l:heading = l:heading . " " . l:headingName
+                let l:heading = l:heading . l:spacesAfterItemChar
+                let l:heading = l:heading . l:headingName
             endif
             silent put =l:heading
         endif
