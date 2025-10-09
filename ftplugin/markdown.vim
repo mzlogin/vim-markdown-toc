@@ -512,6 +512,94 @@ function! s:DeleteExistingToc()
     return [l:markdownStyle, l:beginLineNumber, l:endLineNumber, l:isModeline]
 endfunction
 
+function! s:FindHeadingLineByAnchor(anchor)
+    " Search document headings and return the line number matching the given anchor
+    let l:winview = winsaveview()
+    let g:GFMHeadingIds = {}
+
+    let l:codeSections = <SID>GetCodeSections()
+    let l:flags = "W"
+    let l:headingLineRegex = <SID>HeadingLineRegex()
+
+    while search(l:headingLineRegex, l:flags) != 0
+        let l:lineNum = line('.')
+        if <SID>IsLineInCodeSections(l:codeSections, l:lineNum) == 0
+            let l:headingLine = getline('.')
+            for l:style in s:supportMarkdownStyles
+                let l:headingName = <SID>GetHeadingName(l:headingLine, l:style)
+                let l:headingLink = <SID>GetHeadingLink(l:headingName, l:style)
+                if l:headingLink ==# a:anchor
+                    call winrestview(l:winview)
+                    return l:lineNum
+                endif
+            endfor
+        endif
+        let l:flags = "W"
+    endwhile
+
+    call winrestview(l:winview)
+    return 0
+endfunction
+
+function! s:FindHeadingLineByName(name)
+    " Search document headings by normalized heading name and return the line number
+    let l:winview = winsaveview()
+    let g:GFMHeadingIds = {}
+
+    let l:codeSections = <SID>GetCodeSections()
+    let l:flags = "W"
+    let l:headingLineRegex = <SID>HeadingLineRegex()
+
+    while search(l:headingLineRegex, l:flags) != 0
+        let l:lineNum = line('.')
+        if <SID>IsLineInCodeSections(l:codeSections, l:lineNum) == 0
+            let l:headingLine = getline('.')
+            for l:style in s:supportMarkdownStyles
+                let l:headingName = <SID>GetHeadingName(l:headingLine, l:style)
+                if l:headingName ==# a:name
+                    call winrestview(l:winview)
+                    return l:lineNum
+                endif
+            endfor
+        endif
+        let l:flags = "W"
+    endwhile
+
+    call winrestview(l:winview)
+    return 0
+endfunction
+
+function! s:JumpToTocTarget()
+    " Jump from a TOC line to its corresponding heading in the document.
+    let l:line = getline('.')
+
+    " 1) Try to extract an anchor like (#some-anchor)
+    let l:anchor = matchstr(l:line, '(#\zs[^)]\+\ze)')
+    if l:anchor !=# ''
+        let l:lnum = <SID>FindHeadingLineByAnchor(l:anchor)
+        if l:lnum > 0
+            " Use a linewise normal G jump so the jump is recorded in the jumplist
+            execute 'normal! ' . l:lnum . 'G'
+            normal! zz
+            return
+        endif
+    endif
+
+    " 2) Try to extract the bracketed heading text [Heading name]
+    let l:bracket = matchstr(l:line, '\v\[\zs[^\]]+\ze\]')
+    if l:bracket !=# ''
+        let l:lnum = <SID>FindHeadingLineByName(l:bracket)
+        if l:lnum > 0
+            " Use a linewise normal G jump so the jump is recorded in the jumplist
+            execute 'normal! ' . l:lnum . 'G'
+            normal! zz
+            return
+        endif
+    endif
+
+    echom "Cannot find corresponding heading for TOC line"
+endfunction
+
 command! GenTocGFM :call <SID>GenToc(s:supportMarkdownStyles[s:GFM_STYLE_INDEX])
 command! GenTocGitLab :call <SID>GenToc(s:supportMarkdownStyles[s:GITLAB_STYLE_INDEX])
 command! GenTocRedcarpet :call <SID>GenToc(s:supportMarkdownStyles[s:REDCARPET_STYLE_INDEX])
@@ -519,6 +607,7 @@ command! GenTocMarked :call <SID>GenToc(s:supportMarkdownStyles[s:MARKED_STYLE_I
 command! GenTocModeline :call <SID>GenTocInner(<SID>GetMarkdownStyleInModeline(), 1)
 command! UpdateToc :call <SID>UpdateToc()
 command! RemoveToc :call <SID>DeleteExistingToc()
+command! TocGoto :call <SID>JumpToTocTarget()
 
 if g:vmt_auto_update_on_save == 1
     autocmd BufWritePre *.{md,mdown,mkd,mkdn,markdown,mdwn} if !&diff | exe ':silent! UpdateToc' | endif

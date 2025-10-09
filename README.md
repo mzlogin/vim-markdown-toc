@@ -106,6 +106,10 @@ The `:UpdateToc` command, which is designed to update toc manually, can only wor
 
 `:RemoveToc` command will do this for you, just remember keep insert fence option by default.
 
+### Goto heading under cursor
+
+You can use the `:TocGoto` command to jump to the heading under the cursor.
+
 ## Options
 
 1. `g:vmt_auto_update_on_save`
